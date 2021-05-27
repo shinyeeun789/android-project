@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="39dp"
-            android:layout_marginEnd="250dp"
+            android:layout_marginEnd="249dp"
             android:layout_marginBottom="28dp"
             android:fontFamily="@font/payboocotfextrabold"
             android:text="이름이름"
@@ -37,6 +37,20 @@
             app:layout_constraintBottom_toTopOf="@+id/item_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="226dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:text="인천광역시 어쩌구에서"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/item_goodMark"
+            app:layout_constraintTop_toBottomOf="@+id/item_image" />
 
         <ImageView
             android:id="@+id/item_image"
