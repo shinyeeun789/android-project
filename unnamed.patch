@@ -1,0 +1,1060 @@
+Index: app/google-services.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/google-services.json	(date 1622097476890)
++++ app/google-services.json	(date 1622097476890)
+@@ -0,0 +1,39 @@
++{
++  "project_info": {
++    "project_number": "821560496084",
++    "project_id": "mobile-project-31597",
++    "storage_bucket": "mobile-project-31597.appspot.com"
++  },
++  "client": [
++    {
++      "client_info": {
++        "mobilesdk_app_id": "1:821560496084:android:6674fd49f5a9094a951041",
++        "android_client_info": {
++          "package_name": "com.inhatc.mobile_project"
++        }
++      },
++      "oauth_client": [
++        {
++          "client_id": "821560496084-pbtfhfv8gqjhjcmf826vjpv0vni1ahj0.apps.googleusercontent.com",
++          "client_type": 3
++        }
++      ],
++      "api_key": [
++        {
++          "current_key": "AIzaSyAOUwBdHJKJjFiw_ezAiywdazM5uEJvqDM"
++        }
++      ],
++      "services": {
++        "appinvite_service": {
++          "other_platform_oauth_client": [
++            {
++              "client_id": "821560496084-pbtfhfv8gqjhjcmf826vjpv0vni1ahj0.apps.googleusercontent.com",
++              "client_type": 3
++            }
++          ]
++        }
++      }
++    }
++  ],
++  "configuration_version": "1"
++}
+\ No newline at end of file
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.gradle	(revision 1d98432e60631191f25f402cf16e08c2dfae875a)
++++ build.gradle	(date 1622098214025)
+@@ -6,9 +6,10 @@
+     }
+     dependencies {
+         classpath "com.android.tools.build:gradle:4.1.2"
++        classpath 'com.google.gms:google-services:4.3.8'
+ 
+         // NOTE: Do not place your application dependencies here; they belong
+-        // in the individual module build.gradle files
++        // in the individual module build.gradle filess
+     }
+ }
+ 
+Index: app/src/main/java/com/inhatc/mobile_project/SignUpActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/inhatc/mobile_project/SignUpActivity.java	(date 1622098961496)
++++ app/src/main/java/com/inhatc/mobile_project/SignUpActivity.java	(date 1622098961496)
+@@ -0,0 +1,93 @@
++package com.inhatc.mobile_project;
++
++import android.content.Intent;
++import android.view.View;
++import android.widget.EditText;
++import android.widget.Toast;
++
++import androidx.annotation.NonNull;
++import androidx.appcompat.app.AppCompatActivity;
++
++import com.google.android.gms.tasks.OnCompleteListener;
++import com.google.android.gms.tasks.Task;
++import com.google.firebase.auth.AuthResult;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.auth.FirebaseUser;
++
++public class SignUpActivity extends AppCompatActivity {
++    private FirebaseAuth mAuth; //firevaseAuth 인스턴스 선언
++
++    //활동 초기화할 때 사용자가 현재 로그인되어있는지 확인
++    @Override
++    public void onStart() {
++        super.onStart();
++        // Check if user is signed in (non-null) and update UI accordingly.
++        FirebaseUser currentUser = mAuth.getCurrentUser();
++    }
++
++    View.OnClickListener onClickListener = new View.OnClickListener() {
++        @Override
++        public void onClick(View v) {
++            switch (v.getId()){
++                case R.id.complteBtn:
++                    createAccount(); //버튼 클릭시 회원가입 로직 실행
++                    break;
++
++            }
++        }
++    };
++
++    //회원가입
++    private void createAccount(){
++        // 일반 view는 getText() 사용하지 못해서 (EditText나 TextView에서만 사용가능) EditText로 형변환
++        String email = ((EditText)findViewById(R.id.emailEditText)).getText().toString();
++        String password = ((EditText)findViewById(R.id.passwordEiditText)).getText().toString();
++        String passwordCheck = ((EditText)findViewById(R.id.passwordCheckEditText)).getText().toString();
++
++
++        //이메일, 비번, 비번 체크 값이 있어야지 실행
++        if(email.length() > 0 && password.length() > 0 && passwordCheck.length() > 0){
++            if(password.equals(passwordCheck)){
++                //paassword와 passwordcheck 같으면
++                mAuth.createUserWithEmailAndPassword(email, password)
++                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
++                            @Override
++                            public void onComplete(@NonNull Task<AuthResult> task) {
++
++                                if (task.isSuccessful()) {
++                                    // Sign in success, update UI with the signed-in user's information
++                                    FirebaseUser user = mAuth.getCurrentUser();
++                                    Toast.makeText(SignUpActivity.this, "이메일 사용이 가능합니다.", Toast.LENGTH_SHORT).show();
++
++                                    //회원가입 성공시 정보입력 화면으로
++                                    goTomyActivity(ProfileUpdateActivity.class, true);
++
++                                } else {
++                                    // If sign in fails, display a message to the user.
++                                    if(task.getException() != null){
++                                        Toast.makeText(SignUpActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
++                                    }
++                                }
++                            }
++                        });
++            }else{
++                //비밀번호와 비밀번호 환이 불일치 시
++                Toast.makeText(this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
++            }
++        }else{
++            Toast.makeText(this, "이메일 또는 비밀 번호를 입력해 주해요.", Toast.LENGTH_SHORT).show();
++        }
++    }
++
++    private void goTomyActivity(Class ac, boolean isbacktohome){
++        Intent intent = new Intent(SignUpActivity.this, ac);
++        // 뒤로가기 버튼 누르면 로그인 화면이나 회원가입 화면으로 이동
++        //--> activity 기록 지워주어야 함--> flag 사용??
++        if(isbacktohome){
++            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
++            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
++        }
++
++        startActivity(intent);
++    }
++}
+Index: app/src/main/res/layout/activity_add_member_info.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_add_member_info.xml	(date 1622103063437)
++++ app/src/main/res/layout/activity_add_member_info.xml	(date 1622103063437)
+@@ -0,0 +1,80 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical">
++
++    <TextView
++        android:id="@+id/TextInfo"
++        android:layout_width="match_parent"
++        android:layout_height="100dp"
++        android:gravity="center"
++        android:text="회원정보"
++        android:textColor="#000000"
++        android:textSize="24sp"
++        android:textStyle="bold" />
++
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:gravity="center_horizontal"
++        android:orientation="vertical">
++
++        <androidx.cardview.widget.CardView
++            android:layout_width="200dp"
++            android:layout_height="200dp"
++            app:cardCornerRadius="100dp">
++
++            <ImageView
++                android:id="@+id/imageView2"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                app:srcCompat="@drawable/icon_user" />
++        </androidx.cardview.widget.CardView>
++
++        <EditText
++            android:id="@+id/editTextName"
++            android:layout_width="match_parent"
++            android:layout_height="50dp"
++            android:layout_marginTop="5dp"
++            android:ems="10"
++            android:hint="이름"
++            android:inputType="textPersonName"
++            android:paddingTop="5dp"
++            android:paddingEnd="5dp" />
++
++        <EditText
++            android:id="@+id/editTextPhone"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="5dp"
++            android:ems="10"
++            android:hint="전화 번호 ex) 010-0000-0000"
++            android:inputType="phone"
++            android:paddingTop="5dp"
++            android:paddingEnd="5dp" />
++
++        <EditText
++            android:id="@+id/editTextBirth"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="5dp"
++            android:ems="10"
++            android:hint="생년월일 ex) 1999.01.01"
++            android:inputType="date"
++            android:paddingTop="5dp"
++            android:paddingEnd="5dp" />
++
++        <Button
++            android:id="@+id/complteBtn2"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="5dp"
++            android:paddingTop="5dp"
++            android:paddingEnd="5dp"
++            android:text="완료" />
++
++    </LinearLayout>
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_sign_up.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_sign_up.xml	(date 1621437116507)
++++ app/src/main/res/layout/activity_sign_up.xml	(date 1621437116507)
+@@ -0,0 +1,61 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical">
++
++    <TextView
++        android:id="@+id/textView"
++        android:layout_width="match_parent"
++        android:layout_height="200dp"
++        android:gravity="center"
++        android:text="회원가입"
++        android:textColor="#000000"
++        android:textSize="24sp"
++        android:textStyle="bold" />
++
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:gravity="center_horizontal"
++        android:orientation="vertical"
++        android:padding="10dp">
++
++        <EditText
++            android:id="@+id/emailEditText"
++            android:layout_width="match_parent"
++            android:layout_height="50dp"
++            android:layout_marginBottom="5dp"
++            android:ems="10"
++            android:hint="이메일"
++            android:inputType="textEmailAddress" />
++
++        <EditText
++            android:id="@+id/passwordEiditText"
++            android:layout_width="match_parent"
++            android:layout_height="50dp"
++            android:layout_marginBottom="5dp"
++            android:ems="10"
++            android:hint="비밀번호"
++            android:inputType="textPassword" />
++
++        <EditText
++            android:id="@+id/passwordCheckEditText"
++            android:layout_width="match_parent"
++            android:layout_height="50dp"
++            android:layout_marginBottom="5dp"
++            android:ems="10"
++            android:hint="비밀번호 확인"
++            android:inputType="textPassword" />
++
++        <Button
++            android:id="@+id/complteBtn"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="16dp"
++            android:text="다음" />
++
++    </LinearLayout>
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_passwad_rest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_passwad_rest.xml	(date 1616844177580)
++++ app/src/main/res/layout/activity_passwad_rest.xml	(date 1616844177580)
+@@ -0,0 +1,40 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical">
++
++    <TextView
++        android:id="@+id/textView"
++        android:layout_width="match_parent"
++        android:layout_height="200dp"
++        android:gravity="center"
++        android:text="비밀번호 재설정"
++        android:textColor="#000000"
++        android:textSize="24sp"
++        android:textStyle="bold" />
++
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:orientation="vertical"
++        android:padding="10dp">
++
++        <EditText
++            android:id="@+id/passwordResetEmial"
++            android:layout_width="match_parent"
++            android:layout_height="50dp"
++            android:layout_marginBottom="5dp"
++            android:ems="10"
++            android:hint="이메일"
++            android:inputType="textEmailAddress" />
++
++
++        <Button
++            android:id="@+id/sendBtn"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:text="확인" />
++
++    </LinearLayout>
++</LinearLayout>
+\ No newline at end of file
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision 1d98432e60631191f25f402cf16e08c2dfae875a)
++++ app/build.gradle	(date 1622098060154)
+@@ -1,6 +1,7 @@
+ plugins {
+     id 'com.android.application'
+ }
++apply plugin: 'com.google.gms.google-services'
+ 
+ android {
+     compileSdkVersion 30
+@@ -36,4 +37,27 @@
+     testImplementation 'junit:junit:4.+'
+     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
++
++    // Import the Firebase BoM
++    implementation platform('com.google.firebase:firebase-bom:28.0.1')
++
++    // Add the dependency for the Firebase SDK for Google Analytics
++    // When using the BoM, don't specify versions in Firebase dependencies
++    implementation 'com.google.firebase:firebase-analytics'
++
++    // Add the dependencies for any other desired Firebase products
++    // https://firebase.google.com/docs/android/setup#available-libraries
++
++    // Declare the dependency for the Firebase Authentication library
++    // When using the BoM, you don't specify versions in Firebase library dependencies
++    implementation 'com.google.firebase:firebase-auth'
++
++
++    // Declare the dependency for the Cloud Firestore library
++    // When using the BoM, you don't specify versions in Firebase library dependencies
++    implementation 'com.google.firebase:firebase-firestore'
++
++    // Declare the dependency for the Cloud Storage library
++    // When using the BoM, you don't specify versions in Firebase library dependencies
++    implementation 'com.google.firebase:firebase-storage'
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/inhatc/mobile_project/PassordRestActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/inhatc/mobile_project/PassordRestActivity.java	(date 1622099035098)
++++ app/src/main/java/com/inhatc/mobile_project/PassordRestActivity.java	(date 1622099035098)
+@@ -0,0 +1,79 @@
++package com.inhatc.mobile_project;
++
++import android.content.Intent;
++import android.os.Bundle;
++import android.util.Log;
++import android.view.View;
++import android.widget.EditText;
++import android.widget.Toast;
++
++import androidx.annotation.NonNull;
++import androidx.appcompat.app.AppCompatActivity;
++
++import com.google.android.gms.tasks.OnCompleteListener;
++import com.google.android.gms.tasks.Task;
++import com.google.firebase.auth.FirebaseAuth;
++
++public class PassordRestActivity extends AppCompatActivity {
++
++    private static final String TAG = "SingUpActivity";
++    private FirebaseAuth mAuth; //firevaseAuth 인스턴스 선언
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_passwad_rest);
++
++        // Initialize Firebase Auth
++        mAuth = FirebaseAuth.getInstance();//onCreate() 메서드에서 FirebaseAuth 인스턴스 초기화
++
++        findViewById(R.id.sendBtn).setOnClickListener(onClickListener);
++    }
++
++    View.OnClickListener onClickListener = new View.OnClickListener() {
++        @Override
++        public void onClick(View v) {
++            switch (v.getId()){
++                case R.id.sendBtn:
++                    passwordModify(); //버튼 클릭시 로그인 로직 실행
++                    break;
++            }
++        }
++    };
++
++    //비밀번호 재서정
++    private void passwordModify(){
++        String email = ((EditText)findViewById(R.id.passwordResetEmial)).getText().toString();
++
++        FirebaseAuth auth = FirebaseAuth.getInstance();
++
++        if(email.length() > 0){
++            auth.sendPasswordResetEmail(email)
++                    .addOnCompleteListener(new OnCompleteListener<Void>() {
++                        @Override
++                        public void onComplete(@NonNull Task<Void> task) {
++                            if (task.isSuccessful()) {
++                                Toast.makeText(com.inhatc.mobile_project.PassordRestActivity.this, "이메일을 보냈습니다.", Toast.LENGTH_SHORT).show();
++                                Log.d(TAG, "Email sent.");
++                                goTomyActivity(LoginActivity.class, true);
++                            }
++                        }
++                    });
++        }else{
++            Toast.makeText(com.inhatc.mobile_project.PassordRestActivity.this, "이메일을 입력해주 세요", Toast.LENGTH_SHORT).show();
++        }
++    }
++
++    private void goTomyActivity(Class ac, boolean isbacktohome){
++        Intent intent = new Intent(com.inhatc.mobile_project.PassordRestActivity.this, ac);
++        // 뒤로가기 버튼 누르면 로그인 화면이나 회원가입 화면으로 이동
++        //--> activity 기록 지워주어야 함--> flag 사용??
++        if(isbacktohome){
++            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
++            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
++        }
++
++        startActivity(intent);
++    }
++
++}
+Index: app/src/main/java/com/inhatc/mobile_project/ProfileUpdateActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/inhatc/mobile_project/ProfileUpdateActivity.java	(date 1622103314234)
++++ app/src/main/java/com/inhatc/mobile_project/ProfileUpdateActivity.java	(date 1622103314234)
+@@ -0,0 +1,190 @@
++package com.inhatc.mobile_project;
++
++import android.content.Intent;
++import android.graphics.Bitmap;
++import android.graphics.BitmapFactory;
++import android.net.Uri;
++import android.os.Bundle;
++import android.util.Log;
++import android.view.View;
++import android.widget.EditText;
++import android.widget.Toast;
++
++import androidx.annotation.NonNull;
++import androidx.annotation.Nullable;
++import androidx.appcompat.app.AppCompatActivity;
++
++import com.google.android.gms.tasks.OnCompleteListener;
++import com.google.android.gms.tasks.OnFailureListener;
++import com.google.android.gms.tasks.OnSuccessListener;
++import com.google.android.gms.tasks.Task;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.auth.FirebaseUser;
++import com.google.firebase.firestore.CollectionReference;
++import com.google.firebase.firestore.DocumentReference;
++import com.google.firebase.firestore.DocumentSnapshot;
++import com.google.firebase.firestore.FirebaseFirestore;
++import com.google.firebase.storage.FirebaseStorage;
++import com.google.firebase.storage.StorageReference;
++import com.google.firebase.storage.UploadTask;
++
++import java.io.InputStream;
++import java.text.DateFormat;
++import java.text.ParseException;
++import java.text.SimpleDateFormat;
++import java.util.Date;
++
++public class ProfileUpdateActivity extends AppCompatActivity {
++
++    private EditText userName, phoneNum, birth;
++
++    @Override
++    public void onBackPressed() {
++        //메인 화면에서 뒤로가기 버튼 클릭 시 바로 종료
++        super.onBackPressed();
++        //finish();
++    }
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_add_member_info);
++
++        userName = (EditText)findViewById(R.id.editTextName);
++        phoneNum = (EditText)findViewById(R.id.editTextPhone);
++        birth = (EditText)findViewById(R.id.editTextBirth);
++
++        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
++        FirebaseFirestore db = FirebaseFirestore.getInstance();
++
++//        CollectionReference userInfo = db.collection("users").document(user.getUid()).getParent();
++        DocumentReference docRef =  db.collection("users").document(user.getUid());
++
++        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
++            @Override
++            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
++                MemberInfo minfo;
++                DocumentSnapshot doc = task.getResult();
++                if(doc.exists()){
++                    userName.setText(doc.getString("name"));
++                    phoneNum.setText(doc.getString("phonNum"));
++                    birth.setText(doc.getTimestamp("birth").toString());
++                    //userName.setText();
++                }
++            }
++        });
++
++
++
++        //프로필 사진
++        //profileImageVIew = findViewById(R.id.prfileImageView);
++
++        findViewById(R.id.complteBtn2).setOnClickListener(onClickListener);
++        //findViewById(R.id.prfileImageView).setOnClickListener(onClickListener);
++    }
++
++    View.OnClickListener onClickListener = new View.OnClickListener() {
++        @Override
++        public void onClick(View v) {
++            switch (v.getId()){
++                case R.id.complteBtn2:
++                    profileUpdate();
++                    break;
++//                case R.id.prfileImageView:
++//                    Intent intent = new Intent();
++//                    intent.setType("image/*");
++//                    intent.setAction(Intent.ACTION_GET_CONTENT);
++//                    startActivityForResult(intent, 0);
++//                    //goTomyActivity(CameraActivity.class, false);
++//                    break;
++            }
++        }
++    };
++
++    //갤러리로 이동
++//    @Override
++//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
++//        super.onActivityResult(requestCode, resultCode, data);
++//        if(requestCode == 0){
++//            if(resultCode == RESULT_OK){
++//                try{
++//                    //stream : 데이터가 전송되는 통로 라고 보면 됨,
++//                    InputStream in = getContentResolver().openInputStream(data.getData());
++//
++//                    //inputStream을 bitmap으로 decode, stream이 null이면 decodeStream null반환
++//                    Bitmap img = BitmapFactory.decodeStream(in);
++//                    in.close();
++//
++//
++//
++//                    profileImageVIew.setImageBitmap(img);
++//                }catch (Exception e){
++//                    Log.e("inputStream오류(갤러리에서 사진)", e.toString());
++//                }
++//            }else if(resultCode == RESULT_CANCELED){
++//                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
++//            }
++//        }
++//    }
++
++    private void profileUpdate(){
++
++        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
++
++        FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스 만들고
++        StorageReference storageRef = storage.getReference(); //
++
++        //파일 이름 사진
++//        String filename = "users/"+user.getUid()+"/profileImage.jpg";
++//
++//        Uri file = uri;
++//        Log.d("유알..", String.valueOf(file));
++//
++//        StorageReference riversRef = storageRef.child("users/"+user.getUid()+"/profileImage.jpg");
++//        UploadTask uploadTask = riversRef.putFile(file);
++
++
++        String name = ((EditText)findViewById(R.id.editTextName)).getText().toString();
++        String phonNum = ((EditText)findViewById(R.id.editTextPhone)).getText().toString();
++        String birthDay = ((EditText)findViewById(R.id.editTextBirth)).getText().toString();
++
++
++        if(name.length() > 0){
++            // Access a Cloud Firestore instance from your Activity
++            FirebaseFirestore db = FirebaseFirestore.getInstance();
++            //데이터 베이스에 회원정보 넣어주기
++            MemberInfo memberInfo = new MemberInfo(name, phonNum, birthDay);
++            if(user != null){
++                db.collection("users").document(user.getUid()).set(memberInfo)
++                        .addOnSuccessListener(new OnSuccessListener<Void>() {
++                            @Override
++                            public void onSuccess(Void aVoid) {
++                                Toast.makeText(ProfileUpdateActivity.this, "회원정보를 수정하였습니다.", Toast.LENGTH_SHORT).show();
++                                goTomyActivity(MainActivity.class, true);
++                            }
++                        })
++                        .addOnFailureListener(new OnFailureListener() {
++                            @Override
++                            public void onFailure(@NonNull Exception e) {
++                                Toast.makeText(ProfileUpdateActivity.this, "회원정보 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show();
++                            }
++                        });
++            }
++        }else{
++            Toast.makeText(ProfileUpdateActivity.this, "회원정보를 입력해주 세요.", Toast.LENGTH_SHORT).show();
++        }
++    }
++
++    private void goTomyActivity(Class ac, boolean isbacktohome){
++        Intent intent = new Intent(ProfileUpdateActivity.this, ac);
++        // 뒤로가기 버튼 누르면 로그인 화면이나 회원가입 화면으로 이동
++        //--> activity 기록 지워주어야 함--> flag 사용??
++        if(isbacktohome){
++            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
++            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
++        }
++
++        startActivityForResult(intent, 0);
++    }
++
++}
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/vcs.xml	(date 1622097895386)
++++ .idea/vcs.xml	(date 1622097895386)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: app/src/main/java/com/inhatc/mobile_project/MemberInfo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/inhatc/mobile_project/MemberInfo.java	(date 1622102831696)
++++ app/src/main/java/com/inhatc/mobile_project/MemberInfo.java	(date 1622102831696)
+@@ -0,0 +1,42 @@
++package com.inhatc.mobile_project;
++
++
++import java.util.Date;
++
++public class MemberInfo {
++
++    private String name;
++    private String phonNum;
++    private String birthDay;
++
++
++    public MemberInfo(String name, String phonNum, String birthDay){
++        this.name = name;
++        this.phonNum = phonNum;
++        this.birthDay = birthDay;
++    }
++
++    public String getName() {
++        return name;
++    }
++
++    public void setName(String name) {
++        this.name = name;
++    }
++
++    public String getPhonNum() {
++        return phonNum;
++    }
++
++    public void setPhonNum(String phonNum) {
++        this.phonNum = phonNum;
++    }
++
++    public String getBirth() {
++        return birthDay;
++    }
++
++    public void setBirth(String birthDay) {
++        this.birthDay = birthDay;
++    }
++}
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/gradle.xml	(revision 1d98432e60631191f25f402cf16e08c2dfae875a)
++++ .idea/gradle.xml	(date 1622097895359)
+@@ -1,5 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
+Index: app/src/main/java/com/inhatc/mobile_project/LoginActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/inhatc/mobile_project/LoginActivity.java	(date 1622098844518)
++++ app/src/main/java/com/inhatc/mobile_project/LoginActivity.java	(date 1622098844518)
+@@ -0,0 +1,111 @@
++package com.inhatc.mobile_project;
++
++import android.content.Intent;
++import android.os.Bundle;
++import android.view.View;
++import android.widget.EditText;
++import android.widget.Toast;
++
++import androidx.annotation.NonNull;
++import androidx.appcompat.app.AppCompatActivity;
++
++import com.google.android.gms.tasks.OnCompleteListener;
++import com.google.android.gms.tasks.Task;
++import com.google.firebase.auth.AuthResult;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.auth.FirebaseUser;
++
++public class LoginActivity extends AppCompatActivity {
++    private FirebaseAuth mAuth; //firevaseAuth 인스턴스 선언
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_login);
++
++        // Initialize Firebase Auth
++        mAuth = FirebaseAuth.getInstance();//onCreate() 메서드에서 FirebaseAuth 인스턴스 초기화
++
++
++        findViewById(R.id.loginBtn).setOnClickListener(onClickListener);
++        findViewById(R.id.RegisterBtn).setOnClickListener(onClickListener);
++        findViewById(R.id.pwRest).setOnClickListener(onClickListener);
++    }
++    
++    //활동 초기화할 때 사용자가 현재 로그인되어 있는지 확인
++    @Override
++    public void onStart() {
++        super.onStart();
++        // Check if user is signed in (non-null) and update UI accordingly.
++        FirebaseUser currentUser = mAuth.getCurrentUser();
++        if(FirebaseAuth.getInstance().getCurrentUser() != null){
++            goTomyActivity(MainActivity.class, true);
++        }
++    }
++
++    View.OnClickListener onClickListener = new View.OnClickListener() {
++        @Override
++        public void onClick(View v) {
++            switch (v.getId()){
++                case R.id.loginBtn:
++                    signIn(); //버튼 클릭시 로그인 로직 실행
++                    break;
++                case R.id.RegisterBtn:
++                    //회원가입으로 이동
++                    //activity끼리 서로 호출하기 위해 Intent 사용
++                    // Intent(액티비티 클래스를 구현하느 컨텍스트로 보통 this, 호출할 액티비티)
++                    goTomyActivity(SignUpActivity.class, false);
++                    break;
++                case R.id.pwRest:
++                    goTomyActivity(PassordRestActivity.class, false);
++                    break;
++            }
++        }
++    };
++
++    //로그인
++    private void signIn(){
++        // 일반 view는 getText() 사용하지 못해서 (EditText나 TextView에서만 사용가능) EditText로 형변환
++        String email = ((EditText)findViewById(R.id.emailEditText2)).getText().toString();
++        String password = ((EditText)findViewById(R.id.passwordEiditText2)).getText().toString();
++
++        //이메일, 비번, 값이 있는지 체크
++        if(email.length() > 0 && password.length() > 0){
++            mAuth.signInWithEmailAndPassword(email, password)
++                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
++                        @Override
++                        public void onComplete(@NonNull Task<AuthResult> task) {
++                            if (task.isSuccessful()) {
++                                // Sign in success, update UI with the signed-in user's information
++                                FirebaseUser user = mAuth.getCurrentUser();
++                                Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
++
++                                //로그인 성공시 main 화면으로
++                                goTomyActivity(MainActivity.class, true);
++
++                            } else {
++                                // If sign in fails, display a message to the user.
++                                if(task.getException() != null){
++                                    Toast.makeText(LoginActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
++                                }
++                            }
++                        }
++                    });
++        }else{
++            Toast.makeText(this, "이메일, 비밀 번호를 입력해 주해요.", Toast.LENGTH_SHORT).show();
++        }
++    }
++
++    private void goTomyActivity(Class ac, boolean isbacktohome){
++        Intent intent = new Intent(LoginActivity.this, ac);
++        // 뒤로가기 버튼 누르면 로그인 화면이나 회원가입 화면으로 이동
++        //--> activity 기록 지워주어야 함--> flag 사용??
++        if(isbacktohome){
++            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
++            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
++        }
++
++        startActivity(intent);
++    }
++
++}
+Index: .idea/.name
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/.name	(date 1622097905051)
++++ .idea/.name	(date 1622097905051)
+@@ -0,0 +1,1 @@
++mobile_project
+\ No newline at end of file
+Index: app/src/main/java/com/inhatc/mobile_project/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/inhatc/mobile_project/MainActivity.java	(revision 1d98432e60631191f25f402cf16e08c2dfae875a)
++++ app/src/main/java/com/inhatc/mobile_project/MainActivity.java	(date 1622098648334)
+@@ -6,10 +6,13 @@
+ import androidx.fragment.app.FragmentManager;
+ import androidx.fragment.app.FragmentTransaction;
+ 
++import android.content.Intent;
+ import android.os.Bundle;
+ import android.view.MenuItem;
+ 
+ import com.google.android.material.bottomnavigation.BottomNavigationView;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.auth.FirebaseUser;
+ 
+ public class MainActivity extends AppCompatActivity {
+ 
+@@ -17,11 +20,29 @@
+     private FragmentRanking fragmentRanking = new FragmentRanking();
+     private FragmentUser fragmentUser = new FragmentUser();
+ 
++    @Override
++    public void onBackPressed() {
++        //메인 화면에서 뒤로가기 버튼 클릭 시 바로 종료
++        super.onBackPressed();
++        //finish();
++    }
++
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_main);
+ 
++
++        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
++        if(user == null){
++            //로그인이 안되있으면 로그인 화면으로
++            goTomyActivity(LoginActivity.class, true);
++        }else{
++            //회원정보 가져와서 home에 값 넘기기
++
++        }
++
+         initView();
+     }
+ 
+@@ -60,4 +81,16 @@
+         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+         fragmentTransaction.replace(R.id.frameLayout, fragment).commitAllowingStateLoss();
+     }
++
++    private void goTomyActivity(Class ac, boolean isbacktohome){
++        Intent intent = new Intent(MainActivity.this, ac);
++        // 뒤로가기 버튼 누르면 로그인 화면이나 회원가입 화면으로 이동
++        //--> activity 기록 지워주어야 함--> flag 사용??
++        if(isbacktohome){
++            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
++            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
++        }
++
++        startActivity(intent);
++    }
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_login.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_login.xml	(date 1617007860185)
++++ app/src/main/res/layout/activity_login.xml	(date 1617007860185)
+@@ -0,0 +1,69 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical">
++
++    <TextView
++        android:id="@+id/textView2"
++        android:layout_width="match_parent"
++        android:layout_height="200dp"
++        android:gravity="center"
++        android:text="로그인"
++        android:textColor="#000000"
++        android:textSize="24sp"
++        android:textStyle="bold" />
++
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:orientation="vertical">
++
++        <EditText
++            android:id="@+id/emailEditText2"
++            android:layout_width="match_parent"
++            android:layout_height="50dp"
++            android:layout_marginBottom="5dp"
++            android:ems="10"
++            android:hint="이메일"
++            android:inputType="textEmailAddress" />
++
++        <EditText
++            android:id="@+id/passwordEiditText2"
++            android:layout_width="match_parent"
++            android:layout_height="50dp"
++            android:layout_marginBottom="5dp"
++            android:ems="10"
++            android:hint="비밀번호"
++            android:inputType="textPassword" />
++
++        <Button
++            android:id="@+id/loginBtn"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:text="로그인" />
++
++        <Button
++            android:id="@+id/RegisterBtn"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_marginBottom="10dp"
++            android:background="#26A69A"
++            android:text="회원가입"
++            android:textColor="#F3F3F3"
++            android:textColorLink="#EC407A" />
++
++        <Button
++            android:id="@+id/pwRest"
++            android:layout_width="wrap_content"
++            android:layout_height="40dp"
++            android:layout_gravity="center"
++            android:layout_marginTop="10dp"
++            android:gravity="center"
++            android:text="비밀번호를 까먹으셨나요?"
++            android:textColorLink="#AB47BC"
++            android:textSize="12sp" />
++
++
++    </LinearLayout>
++</LinearLayout>
+\ No newline at end of file

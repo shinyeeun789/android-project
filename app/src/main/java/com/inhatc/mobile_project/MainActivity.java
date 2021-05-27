@@ -6,10 +6,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,9 +21,27 @@ public class MainActivity extends AppCompatActivity {
     private FragmentUser fragmentUser = new FragmentUser();
 
     @Override
+    public void onBackPressed() {
+        //메인 화면에서 뒤로가기 버튼 클릭 시 바로 종료
+        super.onBackPressed();
+        //finish();
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user == null){
+            //로그인이 안되있으면 로그인 화면으로
+            goTomyActivity(LoginActivity.class, true);
+        }else{
+            //회원정보 가져와서 home에 값 넘기기
+
+        }
 
         initView();
     }
@@ -59,5 +80,17 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment).commitAllowingStateLoss();
+    }
+
+    private void goTomyActivity(Class ac, boolean isbacktohome){
+        Intent intent = new Intent(MainActivity.this, ac);
+        // 뒤로가기 버튼 누르면 로그인 화면이나 회원가입 화면으로 이동
+        //--> activity 기록 지워주어야 함--> flag 사용??
+        if(isbacktohome){
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+
+        startActivity(intent);
     }
 }
