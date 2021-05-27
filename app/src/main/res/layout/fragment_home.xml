@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="110dp"
-        android:layout_marginTop="338dp"
-        android:layout_marginEnd="110dp"
-        android:layout_marginBottom="339dp"
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#9DC3E6"
         android:fontFamily="@font/payboocotfextrabold"
-        android:text="Home 화면"
-        android:textSize="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:gravity="center"
+        android:text="커뮤니티"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

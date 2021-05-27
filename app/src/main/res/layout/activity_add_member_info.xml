@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/TextInfo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="회원정보"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:cardCornerRadius="100dp">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/icon_user" />
+        </androidx.cardview.widget.CardView>
+
+        <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:hint="이름"
+            android:inputType="textPersonName"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp" />
+
+        <EditText
+            android:id="@+id/editTextPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:hint="전화 번호 ex) 010-0000-0000"
+            android:inputType="phone"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp" />
+
+        <EditText
+            android:id="@+id/editTextBirth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:hint="생년월일 ex) 1999.01.01"
+            android:inputType="date"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp" />
+
+        <Button
+            android:id="@+id/complteBtn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:text="완료" />
+
+    </LinearLayout>
+</LinearLayout>
