@@ -27,7 +27,7 @@
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/circleImageView"
+                android:id="@+id/profileImgView"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="155dp"
@@ -146,7 +146,7 @@
                 android:textSize="40dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/circleImageView" />
+                app:layout_constraintTop_toBottomOf="@+id/profileImgView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

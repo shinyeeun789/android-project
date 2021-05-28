@@ -10,8 +10,8 @@ import java.util.Map;
 public class Post {
     public String uid;
     public String author;
-    public String title;
-    public String body;
+    public String place;
+    public String content;
     public String downloadImgUri;
     public int starCount = 0;
     public Map<String, Boolean> stars = new HashMap<>();
@@ -20,11 +20,11 @@ public class Post {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Post(String uid, String author, String title, String body) {
+    public Post(String uid, String author, String place, String content) {
         this.uid = uid;
         this.author = author;
-        this.title = title;
-        this.body = body;
+        this.place = place;
+        this.content = content;
     }
 
     @Exclude
@@ -32,8 +32,8 @@ public class Post {
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid", uid);
         result.put("author", author);
-        result.put("title", title);
-        result.put("body", body);
+        result.put("place", place);
+        result.put("content", content);
         result.put("starCount", starCount);
         result.put("stars", stars);
 

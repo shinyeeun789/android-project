@@ -17,25 +17,55 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.inhatc.mobile_project.R;
+import com.inhatc.mobile_project.db.MemberInfo;
+import com.inhatc.mobile_project.db.Post;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WriteActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText edtPlace;
+    private EditText edtPlace, txtcontent;;
     private Button btnPlaceDialog, btnPlaceSearch;
     private Dialog placeDialog;
     private TextView tvCheckPlace;
+    private Button btnAddPost;
 
     private Geocoder geocoder;
     private List<Address> addressList;
+
+    private static final String TAG = "NewPostFragment";
+    private static final String REQUIRED = "Required";
+
+    private DatabaseReference mDatabase;
+    private DatabaseReference conditionRef;
+
+    private MemberInfo userInfo = new MemberInfo();
+    private FirebaseUser user;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write);
+
+        txtcontent = findViewById(R.id.insertContent);
+        btnAddPost = findViewById(R.id.insertBtn);
+
+        btnAddPost.setOnClickListener(this);
+        
+        //현재 사용자 uid 가져와 userInfo 가져오기
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userInfo.bringMemberInfo(user.getUid());
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         btnPlaceDialog = (Button) findViewById(R.id.btnPlaceDialog);        // 나는 지금 여기에서 버튼
         btnPlaceDialog.setOnClickListener(this);
@@ -58,7 +88,27 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                     placeDialog.dismiss();
                 }
                 break;
+            case R.id.insertBtn :          // 저장
+                writeNewPost(user.getUid(), userInfo.getName(), "위치값", txtcontent.getText().toString());
+                finish();
+                break;
         }
+    }
+
+    //포스트 저장
+    private void writeNewPost(String uId, String name, String location, String content) {
+        String key = mDatabase.child("posts").push().getKey();
+        Post post = new Post(uId, name, location, content);
+        Map<String, Object> postValues = post.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        //전체 포스트 저장
+        //post-postuid-내용
+        childUpdates.put("/posts/" + key, postValues);
+        //사용자별 포스트 저장
+        //user-posts-사용자uid-내용
+        childUpdates.put("/user-posts/" + uId + "/" + key, postValues);
+        mDatabase.updateChildren(childUpdates);
     }
 
     // 다이얼로그 보여주기
