@@ -6,23 +6,49 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_marginBottom="60dp"
-        android:background="#9DC3E6"
-        android:fontFamily="@font/payboocotfextrabold"
-        android:gravity="center"
-        android:text="회원정보"
-        android:textColor="@color/white"
-        android:textSize="20dp" />
+        android:background="#9DC3E6">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:gravity="center"
+            android:text="회원정보 입력"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/complteBtn2"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="9dp"
+            android:background="@drawable/icon_round_btn"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:stateListAnimator="@null"
+            android:text="확인"
+            android:textColor="#404040"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="60dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="200dp"
@@ -36,47 +62,61 @@
                 app:srcCompat="@drawable/icon_user" />
         </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:text="이름"
+            android:textSize="20dp"/>
+
         <EditText
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="5dp"
             android:ems="10"
+            android:fontFamily="@font/barunhipi"
             android:hint="이름"
             android:inputType="textPersonName"
             android:paddingTop="5dp"
             android:paddingEnd="5dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:text="전화번호"
+            android:textSize="20dp"/>
+
         <EditText
             android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_height="50dp"
             android:ems="10"
-            android:hint="전화 번호 ex) 010-0000-0000"
+            android:hint="010-0000-0000"
+            android:fontFamily="@font/barunhipi"
             android:inputType="phone"
             android:paddingTop="5dp"
             android:paddingEnd="5dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:text="생년월일"
+            android:textSize="20dp"/>
+
         <EditText
             android:id="@+id/editTextBirth"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_height="50dp"
             android:ems="10"
-            android:hint="생년월일 ex) 1999.01.01"
+            android:hint="1999.01.01"
+            android:fontFamily="@font/barunhipi"
             android:inputType="date"
             android:paddingTop="5dp"
             android:paddingEnd="5dp" />
-
-        <Button
-            android:id="@+id/complteBtn2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="5dp"
-            android:text="완료" />
-
     </LinearLayout>
 </LinearLayout>

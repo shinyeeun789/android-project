@@ -7,16 +7,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="#9DC3E6"
-        android:fontFamily="@font/payboocotfextrabold"
-        android:gravity="center"
-        android:text="글 쓰기"
-        android:textColor="@color/white"
-        android:textSize="20dp" />
+        android:layout_height="55dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="#9DC3E6"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:gravity="center"
+            android:text="새로운 글 작성"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/insertBtn"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="9dp"
+            android:background="@drawable/icon_round_btn"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:stateListAnimator="@null"
+            android:text="추가"
+            android:textColor="#404040"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

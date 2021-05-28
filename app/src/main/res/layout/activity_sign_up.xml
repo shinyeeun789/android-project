@@ -6,33 +6,71 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_marginBottom="60dp"
-        android:background="#9DC3E6"
-        android:fontFamily="@font/payboocotfextrabold"
-        android:gravity="center"
-        android:text="회원가입"
-        android:textColor="@color/white"
-        android:textSize="20dp" />
+        android:background="#9DC3E6">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:gravity="center"
+            android:text="회원가입"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/complteBtn"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="9dp"
+            android:background="@drawable/icon_round_btn"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:stateListAnimator="@null"
+            android:text="다음"
+            android:textColor="#404040"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
+        android:gravity="center_vertical"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:text="이메일"
+            android:textSize="20dp"/>
 
         <EditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginBottom="5dp"
             android:ems="10"
             android:hint="이메일"
             android:inputType="textEmailAddress" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:text="비밀번호"
+            android:textSize="20dp"/>
 
         <EditText
             android:id="@+id/passwordEiditText"
@@ -43,6 +81,14 @@
             android:hint="비밀번호"
             android:inputType="textPassword" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:text="비밀번호 확인"
+            android:textSize="20dp"/>
+
         <EditText
             android:id="@+id/passwordCheckEditText"
             android:layout_width="match_parent"
@@ -51,13 +97,5 @@
             android:ems="10"
             android:hint="비밀번호 확인"
             android:inputType="textPassword" />
-
-        <Button
-            android:id="@+id/complteBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="다음" />
-
     </LinearLayout>
 </LinearLayout>
