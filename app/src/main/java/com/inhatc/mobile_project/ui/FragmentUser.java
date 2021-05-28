@@ -33,7 +33,6 @@ public class FragmentUser extends Fragment {
         phoneNum = view.findViewById(R.id.tv_userPhone);
         birth = view.findViewById(R.id.tv_userBirth);
 
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
