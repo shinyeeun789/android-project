@@ -167,7 +167,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                         });
             }
         }else{
-            Toast.makeText(ProfileUpdateActivity.this, "회원정보를 입력해주 세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileUpdateActivity.this, "회원정보를 입력해주세요.", Toast.LENGTH_SHORT).show();
         }
     }
 

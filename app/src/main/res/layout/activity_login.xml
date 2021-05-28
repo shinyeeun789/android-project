@@ -8,7 +8,6 @@
         android:id="@+id/post_title"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_marginBottom="70dp"
         android:background="#9DC3E6"
         android:fontFamily="@font/payboocotfextrabold"
         android:gravity="center"
@@ -19,13 +18,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="30dp"
         android:orientation="vertical">
 
         <EditText
             android:id="@+id/emailEditText2"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginTop="100dp"
             android:layout_marginBottom="5dp"
+            android:fontFamily="@font/payboocotfextrabold"
             android:ems="10"
             android:hint="이메일"
             android:inputType="textEmailAddress" />
@@ -35,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="5dp"
+            android:fontFamily="@font/payboocotfextrabold"
             android:ems="10"
             android:hint="비밀번호"
             android:inputType="textPassword" />
@@ -43,13 +46,18 @@
             android:id="@+id/loginBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="로그인" />
+            android:layout_marginTop="50dp"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:text="로그인"
+            android:textColor="#404040"/>
 
         <Button
             android:id="@+id/RegisterBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:fontFamily="@font/payboocotfextrabold"
             android:text="회원가입"
             android:textColor="#F3F3F3"
             android:textColorLink="#EC407A" />
@@ -62,6 +70,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:gravity="center"
+            android:fontFamily="@font/barunhipi"
             android:text="비밀번호를 까먹으셨나요?"
             android:textColor="#404040"
             android:textColorLink="#AB47BC"
