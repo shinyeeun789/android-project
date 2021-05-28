@@ -1,4 +1,4 @@
-package com.inhatc.mobile_project;
+package com.inhatc.mobile_project.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.inhatc.mobile_project.R;
 
 public class MainActivity extends AppCompatActivity {
 

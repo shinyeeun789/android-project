@@ -1,7 +1,4 @@
-package com.inhatc.mobile_project;
-
-
-import java.util.Date;
+package com.inhatc.mobile_project.db;
 
 public class MemberInfo {
 

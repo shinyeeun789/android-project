@@ -1,6 +1,8 @@
-package com.inhatc.mobile_project;
+package com.inhatc.mobile_project.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,9 +15,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.inhatc.mobile_project.R;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth; //firevaseAuth 인스턴스 선언
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sign_up);
+
+
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();//onCreate() 메서드에서 FirebaseAuth 인스턴스 초기화
+        findViewById(R.id.complteBtn).setOnClickListener(onClickListener);
+    }
 
     //활동 초기화할 때 사용자가 현재 로그인되어있는지 확인
     @Override
@@ -65,6 +80,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     if(task.getException() != null){
+                                        Log.e("파이어베이스 오류",  task.getException().toString());
                                         Toast.makeText(SignUpActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -75,7 +91,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Toast.makeText(this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
             }
         }else{
-            Toast.makeText(this, "이메일 또는 비밀 번호를 입력해 주해요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "이메일 또는 비밀 번호를 입력해 주세요.", Toast.LENGTH_SHORT).show();
         }
     }
 

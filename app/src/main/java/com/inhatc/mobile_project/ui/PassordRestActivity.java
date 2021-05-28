@@ -1,4 +1,4 @@
-package com.inhatc.mobile_project;
+package com.inhatc.mobile_project.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.inhatc.mobile_project.R;
 
 public class PassordRestActivity extends AppCompatActivity {
 
@@ -53,19 +54,19 @@ public class PassordRestActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(com.inhatc.mobile_project.PassordRestActivity.this, "이메일을 보냈습니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(PassordRestActivity.this, "이메일을 보냈습니다.", Toast.LENGTH_SHORT).show();
                                 Log.d(TAG, "Email sent.");
                                 goTomyActivity(LoginActivity.class, true);
                             }
                         }
                     });
         }else{
-            Toast.makeText(com.inhatc.mobile_project.PassordRestActivity.this, "이메일을 입력해주 세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PassordRestActivity.this, "이메일을 입력해주 세요", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void goTomyActivity(Class ac, boolean isbacktohome){
-        Intent intent = new Intent(com.inhatc.mobile_project.PassordRestActivity.this, ac);
+        Intent intent = new Intent(PassordRestActivity.this, ac);
         // 뒤로가기 버튼 누르면 로그인 화면이나 회원가입 화면으로 이동
         //--> activity 기록 지워주어야 함--> flag 사용??
         if(isbacktohome){
