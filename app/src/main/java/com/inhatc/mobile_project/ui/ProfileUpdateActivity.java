@@ -28,12 +28,16 @@ import com.google.firebase.storage.StorageReference;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
 
+
 import java.io.InputStream;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileUpdateActivity extends AppCompatActivity {
 
     private EditText userName, phoneNum, birth;
-    private ImageView profileImageVIew;
+    private CircleImageView profileImageVIew;
+
 
     @Override
     public void onBackPressed() {
@@ -55,7 +59,6 @@ public class ProfileUpdateActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-//        CollectionReference userInfo = db.collection("users").document(user.getUid()).getParent();
         DocumentReference docRef =  db.collection("users").document(user.getUid());
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -75,10 +78,10 @@ public class ProfileUpdateActivity extends AppCompatActivity {
 
 
         //프로필 사진
-        profileImageVIew = findViewById(R.id.prfileImageView);
+        profileImageVIew = findViewById(R.id.profileImgView);
 
         findViewById(R.id.complteBtn2).setOnClickListener(onClickListener);
-        findViewById(R.id.prfileImageView).setOnClickListener(onClickListener);
+        findViewById(R.id.profileImgView).setOnClickListener(onClickListener);
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -88,7 +91,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                 case R.id.complteBtn2:
                     profileUpdate();
                     break;
-                case R.id.prfileImageView:
+                case R.id.profileImgView:
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
