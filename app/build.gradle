@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.inhatc.mobile_project"
-        minSdkVersion 26
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -66,4 +66,7 @@ dependencies {
     // googleMap
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
+
+    // circleImageView
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 }

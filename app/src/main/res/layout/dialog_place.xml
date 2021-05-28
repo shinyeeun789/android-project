@@ -12,6 +12,7 @@
         android:id="@+id/pDia_edtPlace"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:hint="주소나 지명을 입력해주세요"
         android:fontFamily="@font/barunhipi"
         android:textSize="20dp" />
@@ -21,7 +22,7 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/barunhipi"
-        android:textSize="15dp"/>
+        android:textSize="18dp"/>
 
     <Button
         android:id="@+id/pDia_btnSearchPlace"

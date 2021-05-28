@@ -18,6 +18,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="30dp"
         android:orientation="vertical">
 
         <EditText
@@ -26,6 +27,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="100dp"
             android:layout_marginBottom="5dp"
+            android:fontFamily="@font/payboocotfextrabold"
             android:ems="10"
             android:hint="이메일"
             android:inputType="textEmailAddress" />
@@ -35,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="5dp"
+            android:fontFamily="@font/payboocotfextrabold"
             android:ems="10"
             android:hint="비밀번호"
             android:inputType="textPassword" />

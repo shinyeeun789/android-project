@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,9 +21,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class FragmentUser extends Fragment {
 
     private TextView userName, phoneNum, birth;
+    private CircleImageView imgView;
 
     @Nullable
     @Override
@@ -32,6 +36,14 @@ public class FragmentUser extends Fragment {
         userName = view.findViewById(R.id.tv_userName);
         phoneNum = view.findViewById(R.id.tv_userPhone);
         birth = view.findViewById(R.id.tv_userBirth);
+        imgView = view.findViewById(R.id.circleImageView);
+
+//        imgView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getContext(), "누름!", Toast.LENGTH_LONG).show();
+//            }
+//        });
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
