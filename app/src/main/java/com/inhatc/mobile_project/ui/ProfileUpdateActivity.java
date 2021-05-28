@@ -1,12 +1,17 @@
 package com.inhatc.mobile_project.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,9 +28,12 @@ import com.google.firebase.storage.StorageReference;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
 
+import java.io.InputStream;
+
 public class ProfileUpdateActivity extends AppCompatActivity {
 
     private EditText userName, phoneNum, birth;
+    private ImageView profileImageVIew;
 
     @Override
     public void onBackPressed() {
@@ -67,10 +75,10 @@ public class ProfileUpdateActivity extends AppCompatActivity {
 
 
         //프로필 사진
-        //profileImageVIew = findViewById(R.id.prfileImageView);
+        profileImageVIew = findViewById(R.id.prfileImageView);
 
         findViewById(R.id.complteBtn2).setOnClickListener(onClickListener);
-        //findViewById(R.id.prfileImageView).setOnClickListener(onClickListener);
+        findViewById(R.id.prfileImageView).setOnClickListener(onClickListener);
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -80,42 +88,40 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                 case R.id.complteBtn2:
                     profileUpdate();
                     break;
-//                case R.id.prfileImageView:
-//                    Intent intent = new Intent();
-//                    intent.setType("image/*");
-//                    intent.setAction(Intent.ACTION_GET_CONTENT);
-//                    startActivityForResult(intent, 0);
-//                    //goTomyActivity(CameraActivity.class, false);
-//                    break;
+                case R.id.prfileImageView:
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(intent, 0);
+                    //goTomyActivity(CameraActivity.class, false);
+                    break;
             }
         }
     };
 
     //갤러리로 이동
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == 0){
-//            if(resultCode == RESULT_OK){
-//                try{
-//                    //stream : 데이터가 전송되는 통로 라고 보면 됨,
-//                    InputStream in = getContentResolver().openInputStream(data.getData());
-//
-//                    //inputStream을 bitmap으로 decode, stream이 null이면 decodeStream null반환
-//                    Bitmap img = BitmapFactory.decodeStream(in);
-//                    in.close();
-//
-//
-//
-//                    profileImageVIew.setImageBitmap(img);
-//                }catch (Exception e){
-//                    Log.e("inputStream오류(갤러리에서 사진)", e.toString());
-//                }
-//            }else if(resultCode == RESULT_CANCELED){
-//                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
-//            }
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 0){
+            if(resultCode == RESULT_OK){
+                try{
+                    //stream : 데이터가 전송되는 통로 라고 보면 됨,
+                    InputStream in = getContentResolver().openInputStream(data.getData());
+
+                    //inputStream을 bitmap으로 decode, stream이 null이면 decodeStream null반환
+                    Bitmap img = BitmapFactory.decodeStream(in);
+                    in.close();
+
+                    profileImageVIew.setImageBitmap(img);
+                }catch (Exception e){
+                    Log.e("inputStream오류(갤러리에서 사진)", e.toString());
+                }
+            }else if(resultCode == RESULT_CANCELED){
+                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     private void profileUpdate(){
 

@@ -8,18 +8,30 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.inhatc.mobile_project.R;
+import com.inhatc.mobile_project.db.MemberInfo;
+
+import java.io.Serializable;
+import java.lang.reflect.Member;
 
 public class MainActivity extends AppCompatActivity {
 
     private FragmentHome fragmentHome = new FragmentHome();
     private FragmentRanking fragmentRanking = new FragmentRanking();
     private FragmentUser fragmentUser = new FragmentUser();
+
 
     @Override
     public void onBackPressed() {
@@ -35,12 +47,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        // 현재 로그인 사용자 인스턴스 가져오기
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user == null){
             //로그인이 안되있으면 로그인 화면으로
             goTomyActivity(LoginActivity.class, true);
         }else{
-            //회원정보 가져와서 home에 값 넘기기
+
 
         }
 

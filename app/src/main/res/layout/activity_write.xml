@@ -8,7 +8,6 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="#9DC3E6"
@@ -24,10 +23,39 @@
 
 
         <EditText
+            android:id="@+id/post_title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/barunhipi"
-            android:textSize="15dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="제목"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/post_content"
+            android:layout_width="416dp"
+            android:layout_height="208dp"
+            android:layout_marginTop="24dp"
+            android:background="#D3D3D3"
+            android:gravity="center"
+            android:hint="내용"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_title" />
+
+
+        <Button
+            android:id="@+id/btnAddPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="163dp"
+            android:layout_marginTop="143dp"
+            android:layout_marginEnd="160dp"
+            android:text="글쓰기"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_content" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
