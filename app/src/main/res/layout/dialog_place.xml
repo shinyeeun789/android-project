@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/round_bg"
+    android:padding="40dp">
+
+    <EditText
+        android:id="@+id/pDia_edtPlace"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="주소나 지명을 입력해주세요"
+        android:fontFamily="@font/barunhipi"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/pDia_tvCheck"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/barunhipi"
+        android:textSize="15dp"/>
+
+    <Button
+        android:id="@+id/pDia_btnSearchPlace"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:textColor="#404040"
+        android:text="위치 찾기"
+        android:fontFamily="@font/barunhipi"
+        android:textSize="19dp"/>
+</LinearLayout>

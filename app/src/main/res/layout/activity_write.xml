@@ -48,11 +48,50 @@
         android:layout_height="match_parent">
 
 
+        <ImageView
+            android:id="@+id/insertImg"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="43dp"
+            android:src="@drawable/cuuuute"
+            app:layout_constraintEnd_toStartOf="@+id/btnPlaceDialog"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnPlaceDialog"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="78dp"
+            android:layout_marginEnd="47dp"
+            android:layout_marginBottom="80dp"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:text="나는 지금 여기에서"
+            android:textColor="#404040"
+            app:layout_constraintBottom_toTopOf="@+id/insertContent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <EditText
+            android:id="@+id/insertContent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:layout_marginTop="35dp"
             android:fontFamily="@font/barunhipi"
-            android:textSize="15dp"/>
+            android:inputType="textMultiLine"
+            android:lines="8"
+            android:maxLines="15"
+            android:minLines="8"
+            android:scrollbars="vertical"
+            android:textSize="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.733"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/insertImg" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
