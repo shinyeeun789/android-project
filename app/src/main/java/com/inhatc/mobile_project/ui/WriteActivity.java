@@ -60,7 +60,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
         btnAddPost = findViewById(R.id.insertBtn);
 
         btnAddPost.setOnClickListener(this);
-        
+
         //현재 사용자 uid 가져와 userInfo 가져오기
         user = FirebaseAuth.getInstance().getCurrentUser();
         userInfo.bringMemberInfo(user.getUid());

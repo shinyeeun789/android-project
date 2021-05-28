@@ -17,19 +17,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDl2Dk61LXJVmr9uVG7oxvb2Dm9kPN_-IM" />
 
-        <activity android:name=".ui.MapActivity"></activity>
-        <activity android:name=".ui.WriteActivity" />
-        <activity android:name=".ui.LoginActivity" />
-        <activity android:name=".ui.PassordRestActivity" />
-        <activity android:name=".ui.SignUpActivity" />
-        <activity android:name=".ui.ProfileUpdateActivity" />
-        <activity android:name=".ui.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
