@@ -1,31 +1,56 @@
 package com.inhatc.mobile_project.ui;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.content.CursorLoader;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
 import com.inhatc.mobile_project.db.Post;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +62,12 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     private Dialog placeDialog;
     private TextView tvCheckPlace;
     private Button btnAddPost;
+    private ImageView postimage;
+
+    public static final String INTENT_PATH = "path";
+    public static final String INTENT_MEDIA = "media";
+
+    public static final int GALLEY_CODE = 10;
 
     private Geocoder geocoder;
     private List<Address> addressList;
@@ -44,11 +75,23 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     private static final String TAG = "NewPostFragment";
     private static final String REQUIRED = "Required";
 
+    private int GALLERY_CODE = 10;
+
     private DatabaseReference mDatabase;
-    private DatabaseReference conditionRef;
+    private FirebaseStorage storage;
+    private FirebaseDatabase database;
+
 
     private MemberInfo userInfo = new MemberInfo();
     private FirebaseUser user;
+
+    private String imageUrl="";
+    private String path;
+    private Uri filePath;
+
+    private ImageView selectedImageVIew;
+    private EditText selectedEditText;
+    private ArrayList<String> pathList = new ArrayList<>();
     
 
     @Override
@@ -58,8 +101,10 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
         txtcontent = findViewById(R.id.insertContent);
         btnAddPost = findViewById(R.id.insertBtn);
+        postimage = findViewById(R.id.insertImg);
 
         btnAddPost.setOnClickListener(this);
+        postimage.setOnClickListener(this);
 
         //현재 사용자 uid 가져와 userInfo 가져오기
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -71,7 +116,12 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
         btnPlaceDialog.setOnClickListener(this);
         geocoder = new Geocoder(this);
 
+        database = FirebaseDatabase.getInstance();
+        storage = FirebaseStorage.getInstance();
+
+
     }
+
 
     @Override
     public void onClick(View v) {
@@ -88,27 +138,106 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                     placeDialog.dismiss();
                 }
                 break;
+            case R.id.insertImg :
+                //로컬 사진첩으로 넘김
+                lodadAlbum();
+                break;
             case R.id.insertBtn :          // 저장
-                writeNewPost(user.getUid(), userInfo.getName(), "위치값", txtcontent.getText().toString());
+//                uploadImage(imageUrl);
+                writeNewPost(user.getUid(), userInfo.getName(), "윛피", txtcontent.getText().toString(), filePath);
                 finish();
                 break;
         }
     }
 
-    //포스트 저장
-    private void writeNewPost(String uId, String name, String location, String content) {
-        String key = mDatabase.child("posts").push().getKey();
-        Post post = new Post(uId, name, location, content);
-        Map<String, Object> postValues = post.toMap();
+    private void lodadAlbum() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        startActivityForResult(intent, GALLEY_CODE);
+    }
 
-        Map<String, Object> childUpdates = new HashMap<>();
-        //전체 포스트 저장
-        //post-postuid-내용
-        childUpdates.put("/posts/" + key, postValues);
-        //사용자별 포스트 저장
-        //user-posts-사용자uid-내용
-        childUpdates.put("/user-posts/" + uId + "/" + key, postValues);
-        mDatabase.updateChildren(childUpdates);
+    //사진 고른 후 돌아오는 코드
+    //로컬 파일에서 업로드
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == GALLERY_CODE)
+        {
+            //파일 경로 받음
+            filePath = data.getData();
+            //파일 이미지 뷰에 띄우기
+            try{
+                InputStream in = getContentResolver().openInputStream(data.getData());
+                Bitmap img = BitmapFactory.decodeStream(in);
+                in.close();
+                postimage.setImageBitmap(img);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
+
+    //포스트 저장
+    private void writeNewPost(String uId, String name, String location, String content, Uri filePath) {
+
+        //포스트 키값 가져오기
+        String key = mDatabase.child("posts").push().getKey();
+
+        try{
+            StorageReference storageRef = storage.getReference();
+            StorageReference riversRef = storageRef.child("photos/"+key+".png");
+            UploadTask uploadTask = riversRef.putFile(filePath);
+
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if(!task.isSuccessful()){
+                        throw task.getException();
+                    }
+                    // Continue with the task to get the download URL
+                    return riversRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if(task.isSuccessful()){
+                        Toast.makeText(WriteActivity.this, "업로드 성공", Toast.LENGTH_SHORT).show();
+
+                        @SuppressWarnings("VisibleForTests")
+                        Uri downloadUrl = task.getResult();
+
+                        Post post = new Post(uId, name, location, content, downloadUrl.toString());
+                        Map<String, Object> postValues = post.toMap();
+
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        //전체 포스트 저장
+                        //post-postuid-내용
+                        childUpdates.put("/posts/" + key, postValues);
+                        //사용자별 포스트 저장
+                        //user-posts-사용자uid-내용
+                        childUpdates.put("/user-posts/" + uId + "/" + key, postValues);
+                        mDatabase.updateChildren(childUpdates);
+
+
+                    }else{
+                        Toast.makeText(WriteActivity.this, "업로드 실패", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        }catch (NullPointerException e)
+        {
+            Toast.makeText(WriteActivity.this, "이미지 선택 안함", Toast.LENGTH_SHORT).show();
+        }
+
+
+
     }
 
     // 다이얼로그 보여주기

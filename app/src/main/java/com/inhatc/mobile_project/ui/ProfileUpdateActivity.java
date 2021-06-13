@@ -114,6 +114,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
 
                     //inputStream을 bitmap으로 decode, stream이 null이면 decodeStream null반환
                     Bitmap img = BitmapFactory.decodeStream(in);
+
                     in.close();
 
                     profileImageVIew.setImageBitmap(img);

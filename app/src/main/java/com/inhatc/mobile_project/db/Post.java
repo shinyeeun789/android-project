@@ -1,5 +1,7 @@
 package com.inhatc.mobile_project.db;
 
+import android.net.Uri;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -20,11 +22,12 @@ public class Post {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Post(String uid, String author, String place, String content) {
+    public Post(String uid, String author, String place, String content, String downloadImgUri) {
         this.uid = uid;
         this.author = author;
         this.place = place;
         this.content = content;
+        this.downloadImgUri = downloadImgUri;
     }
 
     @Exclude
@@ -35,6 +38,7 @@ public class Post {
         result.put("place", place);
         result.put("content", content);
         result.put("starCount", starCount);
+        result.put("urlImage", downloadImgUri);
         result.put("stars", stars);
 
         return result;
