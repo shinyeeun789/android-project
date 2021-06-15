@@ -42,7 +42,7 @@ public class Post {
         result.put("place", place);
         result.put("postcontent", postcontent);
         result.put("starCount", starCount);
-        result.put("urlImage", downloadImgUri);
+        result.put("downloadImgUri", downloadImgUri);
         result.put("stars", stars);
         result.put("title", title);
         result.put("profileImg", profileImg);

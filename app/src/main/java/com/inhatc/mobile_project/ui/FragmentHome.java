@@ -118,24 +118,50 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
 
         pDatabase = FirebaseDatabase.getInstance();// 파이어베이스 데이터베이스 연동
         databaseReference = pDatabase.getReference("posts"); // DB 테이블 연결
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        pAdapter = new PostAdapter(postarray, getContext());
+        mRv_posts.setAdapter(pAdapter); //리사이클 뷰에 어댑터 연결
+
+        ValueEventListener postListener = new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot datasnapshot) {
-                postarray.clear();
-                for (DataSnapshot snapshot : datasnapshot.getChildren()){// 반복문으로 데이터 List를 추출해냄
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){// 반복문으로 데이터 List를 추출해냄
                     Post post = snapshot.getValue(Post.class); // Post 객체에 데이터 담기
                     postarray.add(post);
                 }
-                pAdapter.notifyDataSetChanged();// 리스트 저장 및 새로 고침해야 반영이 됨
+                pAdapter.setItem(postarray);
+
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("FramentHome", String.valueOf(error.toException()));// 디비 에러
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
             }
-        });
-        pAdapter = new PostAdapter(postarray, getContext());
-        mRv_posts.setAdapter(pAdapter); //리사이클 뷰에 어댑터 연결
+        };
+        databaseReference.addValueEventListener(postListener);
+
+
+//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot datasnapshot) {
+//                postarray.clear();
+//                for (DataSnapshot snapshot : datasnapshot.getChildren()){// 반복문으로 데이터 List를 추출해냄
+//                    Post post = snapshot.getValue(Post.class); // Post 객체에 데이터 담기
+//                    postarray.add(post);
+//                }
+//                //pAdapter.notifyDataSetChanged();// 리스트 저장 및 새로 고침해야 반영이 됨
+//                pAdapter.setItem(postarray);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.e("FramentHome", String.valueOf(error.toException()));// 디비 에러
+//            }
+//        });
+//        pAdapter = new PostAdapter(postarray, getContext());
+//        mRv_posts.setAdapter(pAdapter); //리사이클 뷰에 어댑터 연결
 
 
 

@@ -242,7 +242,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
                             @SuppressWarnings("VisibleForTests")
                             Uri downloadUrl = task.getResult();
-                            Post post = new Post(uId, name, location, content, downloadUrl.toString(), title, userInfo.getProfimageURL());
+                            Post post = new Post(uId, name, location, content, title, downloadUrl.toString(), userInfo.getProfimageURL());
                             writeNewPost(post, key);
 
 
@@ -257,7 +257,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 Log.d("phtoURL 성공", "이미지 선택 안함");
             }
         }else {
-            Post post = new Post(uId, name, location, content, "null", title, userInfo.getProfimageURL());
+            Post post = new Post(uId, name, location, content, "null", null, userInfo.getProfimageURL());
             writeNewPost(post, key);
         }
 
