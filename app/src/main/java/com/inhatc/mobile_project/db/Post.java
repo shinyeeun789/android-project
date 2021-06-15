@@ -10,26 +10,28 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class Post {
-    public String uid;
-    public String author;
-    public String place;
-    public String userProfile;
-    public String content;
-    public String downloadImgUri;
-    public int starCount = 0;
+    private String uid;
+    private String author;
+    private String place;
+    private String postcontent;
+    private String title;
+    private String downloadImgUri;
+    private String profileImg;
+    private int starCount = 0;
     public Map<String, Boolean> stars = new HashMap<>();
 
     public Post() {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Post(String uid, String author, String place, String content, String downloadImgUri, String userProfile) {
+    public Post(String uid, String author, String place, String content, String title, String downloadImgUri, String profileImg) {
         this.uid = uid;
         this.author = author;
         this.place = place;
-        this.content = content;
+        this.postcontent = content;
         this.downloadImgUri = downloadImgUri;
-        this.userProfile = userProfile;
+        this.title = title;
+        this.profileImg = profileImg;
     }
 
     @Exclude
@@ -38,12 +40,78 @@ public class Post {
         result.put("uid", uid);
         result.put("author", author);
         result.put("place", place);
-        result.put("content", content);
+        result.put("content", postcontent);
         result.put("starCount", starCount);
         result.put("urlImage", downloadImgUri);
-        result.put("profileImage", userProfile);
         result.put("stars", stars);
+        result.put("title", title);
+        result.put("profileImg", profileImg);
 
         return result;
+    }
+
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
+    public String getPostcontent() {
+        return postcontent;
+    }
+
+    public void setPostcontent(String postcontent) {
+        this.postcontent = postcontent;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDownloadImgUri() {
+        return downloadImgUri;
+    }
+
+    public void setDownloadImgUri(String downloadImgUri) {
+        this.downloadImgUri = downloadImgUri;
+    }
+
+    public int getStarCount() {
+        return starCount;
+    }
+
+    public void setStarCount(int starCount) {
+        this.starCount = starCount;
     }
 }

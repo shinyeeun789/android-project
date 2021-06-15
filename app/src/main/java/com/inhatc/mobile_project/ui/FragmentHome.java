@@ -11,6 +11,8 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,11 +20,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.inhatc.mobile_project.R;
+import com.inhatc.mobile_project.adapter.PostAdapter;
 import com.inhatc.mobile_project.db.MemberInfo;
 import com.inhatc.mobile_project.db.Post;
 
@@ -31,32 +35,35 @@ import org.parceler.Parcels;
 public class FragmentHome extends Fragment implements View.OnClickListener {
     private Button btnGoWrite;
     private MemberInfo userInfo = new MemberInfo();
+    private DatabaseReference pDatabase;
+    private PostAdapter pAdapter;
+
+    private RecyclerView mRv_posts;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Bundle bundle = getArguments();
-//        if(bundle != null){
-//            Object value = Parcels.unwrap(bundle.getParcelable("userInfoData"));
-//            userInfo = (MemberInfo) value;
-//           // Log.e("생일",userInfo.getPhonNum());
-//        }
+        if(bundle != null){
+            Object value = Parcels.unwrap(bundle.getParcelable("userInfoData"));
+            userInfo = (MemberInfo) value;
+           // Log.e("생일",userInfo.getPhonNum());
+        }
         btnGoWrite = (Button) view.findViewById(R.id.btnGoWrite);
         btnGoWrite.setOnClickListener(this);
+        mRv_posts = (RecyclerView) view.findViewById(R.id.homeRecyclerView);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        pDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DocumentReference docRef =  db.collection("users").document(user.getUid());
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+        mRv_posts.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mRv_posts.setLayoutManager(layoutManager);
+        // = new PostAdapter(pDatabase);
 
 
 
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                userInfo = documentSnapshot.toObject(MemberInfo.class);
-            }
-        });
 
         return view;
     }
