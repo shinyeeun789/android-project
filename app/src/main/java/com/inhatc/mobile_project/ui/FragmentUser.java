@@ -53,6 +53,13 @@ public class FragmentUser extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user, container, false);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            Bundle bundle = getArguments();
+            if(bundle != null){
+                Object value = Parcels.unwrap(bundle.getParcelable("userInfoData"));
+                userInfo = (MemberInfo) value;
+            }
+        }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         userName = view.findViewById(R.id.tv_userName);
@@ -67,36 +74,12 @@ public class FragmentUser extends Fragment {
         btnUpdate.setOnClickListener(onClickListener);
         btnLogout.setOnClickListener(onClickListener);
 
-        DocumentReference docRef =  db.collection("users").document(user.getUid());
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot document = task.getResult();
-                    if(document != null){
-                        if(document.exists()){
-                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-
-                            userInfo.setName(document.getString("name"));
-                            userInfo.setBirthDay(document.getString("birthDay"));
-                            userInfo.setProfimageURL(document.getString("profimageURL"));
-                            userInfo.setPhonNum(document.getString("phonNum"));
-                            userName.setText(userInfo.getName());
-                            phoneNum.setText(userInfo.getPhonNum());
-                            birth.setText(userInfo.getBirthDay());
-                            new DownloadFilesTask(imgView).execute(userInfo.getProfimageURL());
-                        }else {
-                            Log.d(TAG, "No such document");
-                        }
-                    }else {
-                        Log.d(TAG, "get failed with ", task.getException());
-                    }
-                }
-
-            }
-        });
-
-
+        userName.setText(userInfo.getName());
+        phoneNum.setText(userInfo.getPhonNum());
+        birth.setText(userInfo.getBirthDay());
+        if(userInfo.getProfimageURL() != null){
+            new DownloadFilesTask(imgView).execute(userInfo.getProfimageURL());
+        }
 
 
         return view;
@@ -116,7 +99,6 @@ public class FragmentUser extends Fragment {
                     startActivity(logoutintent);
                     break;
                 case R.id.btnUpdateUser:
-
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("userInfoData", Parcels.wrap(userInfo));
                     Intent intent = new Intent(getActivity(), ProfileUpdateActivity.class);

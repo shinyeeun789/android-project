@@ -90,7 +90,10 @@ public class ProfileUpdateActivity extends AppCompatActivity {
         phoneNum.setText(userInfo.getPhonNum());
         birth.setText(userInfo.getBirthDay());
 
-        new DownloadFilesTask(profileImageVIew).execute(userInfo.getProfimageURL());
+        if(userInfo.getProfimageURL() != null){
+            new DownloadFilesTask(profileImageVIew).execute(userInfo.getProfimageURL());
+        }
+
 
 
         findViewById(R.id.complteBtn2).setOnClickListener(onClickListener);
@@ -104,7 +107,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.complteBtn2:
-                    profileUpdate();
+                    pthotURL();
                     break;
                 case R.id.profileImgView:
                     //로컬 사진첩으로 넘김
@@ -127,10 +130,10 @@ public class ProfileUpdateActivity extends AppCompatActivity {
 
         if(requestCode == GALLEY_CODE)
         {
-            //파일 경로 받음
-            filePath = data.getData();
-            //파일 이미지 뷰에 띄우기
             try{
+                //파일 경로 받음
+                filePath = data.getData();
+                //파일 이미지 뷰에 띄우기
                 InputStream in = getContentResolver().openInputStream(data.getData());
                 Bitmap img = BitmapFactory.decodeStream(in);
                 in.close();
@@ -139,21 +142,20 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (NullPointerException e){
+                e.printStackTrace();
             }
 
         }
     }
 
-    /*회원정보 업로드*/
-    private void profileUpdate(){
-
+    private void pthotURL(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();//현재 user값 받아서
 
         FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스 만들고
         StorageReference storageRef = storage.getReference();
         StorageReference riversRef = storageRef.child("profile/" + user.getUid() + ".png");//프로필 사진 경로 지정
 
-        //프로필 사진을 선택 하면
         if(filePath != null){
             try {
                 //사진 업로드
@@ -176,6 +178,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                             @SuppressWarnings("VisibleForTests")
                             Uri downloadUrl = task.getResult();//업로드한 사진 다운로드 url
                             strUrl = downloadUrl.toString();
+                            profileUpdate();
 
                         }else{
                             Toast.makeText(ProfileUpdateActivity.this, "업로드 실패", Toast.LENGTH_SHORT).show();
@@ -189,8 +192,20 @@ public class ProfileUpdateActivity extends AppCompatActivity {
 
         }else {
             //프로필 사진을 선택하지않고 기본 값으로 하면
-            strUrl = "https://firebasestorage.googleapis.com/v0/b/mobile-project-31597.appspot.com/o/profile%2Ficon_user.png?alt=media&token=1f46c19a-0173-4e29-ae8c-a05d2d84769c";
+            strUrl = userInfo.getProfimageURL();
+            profileUpdate();
+
         }
+    }
+
+    /*회원정보 업로드*/
+    private void profileUpdate(){
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();//현재 user값 받아서
+
+        FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스 만들고
+        StorageReference storageRef = storage.getReference();
+        StorageReference riversRef = storageRef.child("profile/" + user.getUid() + ".png");//프로필 사진 경로 지정
 
         //입력 정보 가져오기
         String strname = ((EditText)findViewById(R.id.editTextName)).getText().toString();

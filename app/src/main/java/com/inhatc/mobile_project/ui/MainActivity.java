@@ -58,15 +58,15 @@ public class MainActivity extends AppCompatActivity {
             goTomyActivity(LoginActivity.class, true);
         }else{
 
-//            FirebaseFirestore db = FirebaseFirestore.getInstance();
-//            DocumentReference docRef =  db.collection("users").document(user.getUid());
-//            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//
-//                @Override
-//                public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                    userInfo = documentSnapshot.toObject(MemberInfo.class);
-//                }
-//            });
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef =  db.collection("users").document(user.getUid());
+            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    userInfo = documentSnapshot.toObject(MemberInfo.class);
+                }
+            });
         }
 
         initView();
@@ -103,9 +103,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void replaceFragment(Fragment fragment) {
-//        Bundle bundle = new Bundle();
-//        bundle.putParcelable("userInfoData", Parcels.wrap(userInfo));
-//        fragment.setArguments(bundle);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("userInfoData", Parcels.wrap(userInfo));
+        fragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment).commitAllowingStateLoss();

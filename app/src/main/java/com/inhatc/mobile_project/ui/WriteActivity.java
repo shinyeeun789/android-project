@@ -52,7 +52,7 @@ import java.util.Map;
 
 public class WriteActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText edtPlace, txtcontent;;
+    private EditText edtPlace, txtcontent, etTilte;
     private Button btnPlaceDialog, btnPlaceSearch;
     private Dialog placeDialog;
     private TextView tvCheckPlace;
@@ -95,6 +95,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
         txtcontent = findViewById(R.id.insertContent);
         btnAddPost = findViewById(R.id.insertBtn);
         postimage = findViewById(R.id.insertImg);
+        etTilte = findViewById(R.id.EtTitle);
 
         btnAddPost.setOnClickListener(this);
         postimage.setOnClickListener(this);
@@ -137,7 +138,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
             case R.id.insertBtn :          // 저장
 //                uploadImage(imageUrl);
                 if(txtcontent.getText() != null && filePath != null){
-                    pthotURL(user.getUid(), userInfo.getName(), "윛피", txtcontent.getText().toString(), filePath, userInfo.getProfimageURL());
+                    pthotURL(user.getUid(), userInfo.getName(), "윛피", txtcontent.getText().toString(), filePath, etTilte.getText().toString());
                     finish();
                 }else{
                     Toast.makeText(WriteActivity.this, "내용또는 사진을 선택 해주세요", Toast.LENGTH_SHORT).show();
@@ -189,7 +190,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
             childUpdates.put("/posts/" + key, postValues);
             //사용자별 포스트 저장
             //user-posts-사용자uid-내용
-            childUpdates.put("/user-posts/" + post.uid + "/" + key, postValues);
+            childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
             mDatabase.updateChildren(childUpdates);
             Toast.makeText(WriteActivity.this, "업로드 성공", Toast.LENGTH_SHORT).show();
         }catch (Exception e){
@@ -200,7 +201,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     }
 
     //사진 Url로
-    private void pthotURL(String uId, String name, String location, String content, Uri filePath, String ProfimageURL) {
+    private void pthotURL(String uId, String name, String location, String content, Uri filePath, String title) {
 
         //포스트 키값 가져오기
         String key = mDatabase.child("posts").push().getKey();
@@ -229,7 +230,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
                             @SuppressWarnings("VisibleForTests")
                             Uri downloadUrl = task.getResult();
-                            Post post = new Post(uId, name, location, content, downloadUrl.toString(), ProfimageURL);
+                            Post post = new Post(uId, name, location, content, downloadUrl.toString(), title, userInfo.getProfimageURL());
                             writeNewPost(post, key);
 
 
@@ -244,7 +245,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 Log.d("phtoURL 성공", "이미지 선택 안함");
             }
         }else {
-            Post post = new Post(uId, name, location, content, "null", ProfimageURL);
+            Post post = new Post(uId, name, location, content, "null", title, userInfo.getProfimageURL());
             writeNewPost(post, key);
         }
 

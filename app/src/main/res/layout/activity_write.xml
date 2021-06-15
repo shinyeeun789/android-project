@@ -53,12 +53,13 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginStart="28dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="43dp"
             android:src="@drawable/cuuuute"
             app:layout_constraintEnd_toStartOf="@+id/btnPlaceDialog"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/EtTitle" />
 
         <Button
             android:id="@+id/btnPlaceDialog"
@@ -66,13 +67,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="78dp"
-            android:layout_marginEnd="47dp"
+            android:layout_marginEnd="48dp"
             android:layout_marginBottom="80dp"
             android:fontFamily="@font/payboocotfextrabold"
             android:text="나는 지금 여기에서"
             android:textColor="#404040"
             app:layout_constraintBottom_toTopOf="@+id/insertContent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.93" />
+
+        <EditText
+            android:id="@+id/EtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginEnd="30dp"
+            android:hint="제목"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
@@ -82,6 +97,7 @@
             android:layout_margin="30dp"
             android:layout_marginTop="35dp"
             android:fontFamily="@font/barunhipi"
+            android:hint="내용"
             android:inputType="textMultiLine"
             android:maxLines="15"
             android:scrollbars="vertical"

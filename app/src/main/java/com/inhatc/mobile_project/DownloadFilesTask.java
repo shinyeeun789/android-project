@@ -17,6 +17,18 @@ public class DownloadFilesTask extends  AsyncTask<String,Void, Bitmap>{
         this.imgView = imgView;
     }
 
+    public DownloadFilesTask(){
+
+    }
+
+    public ImageView getImgView() {
+        return imgView;
+    }
+
+    public void setImgView(ImageView imgView) {
+        this.imgView = imgView;
+    }
+
     @Override
     protected Bitmap doInBackground(String... strings) {
         Bitmap bmp = null;
