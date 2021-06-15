@@ -42,6 +42,8 @@ import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
 import com.inhatc.mobile_project.db.Post;
 
+import org.parceler.Parcels;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,6 +75,9 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     private DatabaseReference mDatabase;
     private FirebaseStorage storage;
     private FirebaseDatabase database;
+    private Bundle bundle = new Bundle();
+
+//    private String userName, userProfile;
 
 
     private MemberInfo userInfo = new MemberInfo();
@@ -92,6 +97,15 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write);
 
+        Intent intent = getIntent();
+//        userName = intent.getStringExtra("userName");
+//        userProfile = intent.getStringExtra("userProfile");
+        bundle = intent.getBundleExtra("userInfoData");
+        if(bundle != null){
+            Object value = Parcels.unwrap(bundle.getParcelable("userInfoData"));
+            userInfo = (MemberInfo) value;
+        }
+
         txtcontent = findViewById(R.id.insertContent);
         btnAddPost = findViewById(R.id.insertBtn);
         postimage = findViewById(R.id.insertImg);
@@ -102,7 +116,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
         //현재 사용자 uid 가져와 userInfo 가져오기
         user = FirebaseAuth.getInstance().getCurrentUser();
-        userInfo.bringMemberInfo(user.getUid());
+        //userInfo.bringMemberInfo(user.getUid());
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 

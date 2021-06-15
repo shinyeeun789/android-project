@@ -24,11 +24,11 @@ public class Post {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Post(String uid, String author, String place, String content, String title, String downloadImgUri, String profileImg) {
+    public Post(String uid, String author, String place, String postcontent, String title, String downloadImgUri, String profileImg) {
         this.uid = uid;
         this.author = author;
         this.place = place;
-        this.postcontent = content;
+        this.postcontent = postcontent;
         this.downloadImgUri = downloadImgUri;
         this.title = title;
         this.profileImg = profileImg;
@@ -40,7 +40,7 @@ public class Post {
         result.put("uid", uid);
         result.put("author", author);
         result.put("place", place);
-        result.put("content", postcontent);
+        result.put("postcontent", postcontent);
         result.put("starCount", starCount);
         result.put("urlImage", downloadImgUri);
         result.put("stars", stars);

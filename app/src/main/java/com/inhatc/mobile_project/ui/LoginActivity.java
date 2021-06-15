@@ -92,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                     });
+
         }else{
             Toast.makeText(this, "이메일, 비밀 번호를 입력해 주해요.", Toast.LENGTH_SHORT).show();
         }

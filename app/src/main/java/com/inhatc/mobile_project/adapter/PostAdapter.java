@@ -63,7 +63,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.poster_id.setText(postItems.get(position).getAuthor());
         holder.tv_contents.setText(postItems.get(position).getPostcontent());
         holder.tv_location.setText(postItems.get(position).getPlace());
-        holder.likeCounter.setText(postItems.get(position).getStarCount());
+        holder.likeCounter.setText(String.valueOf(postItems.get(position).getStarCount()));
 
     }
 
@@ -79,9 +79,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             //context = view.findViewById(R.id.textView3);
             poster_id = view.findViewById(R.id.item_name);
             tv_contents = view.findViewById(R.id.item_content);
-            tv_location = view.findViewById(R.id.tv_place);
+            tv_location = view.findViewById(R.id.item_place);
             postImage = view.findViewById(R.id.item_image);
-            posterProfile = view.findViewById(R.id.item_userImage);
+            posterProfile = view.findViewById(R.id.item_profile);
             likeCounter = view.findViewById(R.id.item_goodCount);
             likeImg = view.findViewById(R.id.item_goodMark);
 

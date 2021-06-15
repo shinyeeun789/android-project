@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -42,6 +43,7 @@ public class FragmentUser extends Fragment {
     private Button btnUpdate, btnLogout;
 
     private MemberInfo userInfo = new MemberInfo();
+    private Bundle bundle = new Bundle();
 
 
     private CircleImageView imgView;
@@ -58,9 +60,26 @@ public class FragmentUser extends Fragment {
             if(bundle != null){
                 Object value = Parcels.unwrap(bundle.getParcelable("userInfoData"));
                 userInfo = (MemberInfo) value;
+                bundle.putParcelable("userInfoData", Parcels.wrap(userInfo));
+
             }
         }
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        DocumentReference docRef =  db.collection("users").document(user.getUid());
+//        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                userInfo = documentSnapshot.toObject(MemberInfo.class);
+//                userName.setText(userInfo.getName());
+//                phoneNum.setText(userInfo.getPhonNum());
+//                birth.setText(userInfo.getBirthDay());
+//                if(userInfo.getProfimageURL() != null){
+//                    new DownloadFilesTask(imgView).execute(userInfo.getProfimageURL());
+//                }
+//            }
+//        });
+
+
 
         userName = view.findViewById(R.id.tv_userName);
         phoneNum = view.findViewById(R.id.tv_userPhone);
@@ -71,15 +90,19 @@ public class FragmentUser extends Fragment {
 
         imgView = view.findViewById(R.id.profileImgView);
 
-        btnUpdate.setOnClickListener(onClickListener);
-        btnLogout.setOnClickListener(onClickListener);
-
         userName.setText(userInfo.getName());
         phoneNum.setText(userInfo.getPhonNum());
         birth.setText(userInfo.getBirthDay());
-        if(userInfo.getProfimageURL() != null){
-            new DownloadFilesTask(imgView).execute(userInfo.getProfimageURL());
-        }
+        Glide.with(view)
+                .load(userInfo.getProfimageURL())
+                .into(imgView);
+//        if(userInfo.getProfimageURL() != null){
+//            new DownloadFilesTask(imgView).execute(userInfo.getProfimageURL());
+//        }
+
+        btnUpdate.setOnClickListener(onClickListener);
+        btnLogout.setOnClickListener(onClickListener);
+
 
 
         return view;

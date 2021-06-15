@@ -1,6 +1,7 @@
 package com.inhatc.mobile_project.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -20,9 +21,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
+import com.inhatc.mobile_project.db.Post;
 
 import org.parceler.Parcels;
 
@@ -30,6 +34,8 @@ import java.io.Serializable;
 import java.lang.reflect.Member;
 
 public class MainActivity extends AppCompatActivity {
+
+    final String TAG="MainActivity";
 
     private FragmentHome fragmentHome = new FragmentHome();
     private FragmentRanking fragmentRanking = new FragmentRanking();
@@ -60,16 +66,32 @@ public class MainActivity extends AppCompatActivity {
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference docRef =  db.collection("users").document(user.getUid());
-            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-
+            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    userInfo = documentSnapshot.toObject(MemberInfo.class);
+                public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException error) {
+                    if(error != null){
+                        Log.w(TAG, "Listen failed.", error);
+                        return;
+                    }
+
+                    String source = snapshot != null && snapshot.getMetadata().hasPendingWrites() ? "Local" : "Server";
+                    if(snapshot != null && snapshot.exists()){
+                        Log.d(TAG, source + "data: " +snapshot.getData());
+                        userInfo = snapshot.toObject(MemberInfo.class);
+                        initView();
+//                        userName = snapshot.getString("name");
+//                        userPrfile = snapshot.getString("profimageURL");
+
+                    }else {
+                        Log.d(TAG, source + " data: null");
+                    }
+
                 }
+
             });
+
         }
 
-        initView();
     }
 
     private void initView() {
