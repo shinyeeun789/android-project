@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
 
+import org.parceler.Parcels;
+
 import java.io.Serializable;
 import java.lang.reflect.Member;
 
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentHome fragmentHome = new FragmentHome();
     private FragmentRanking fragmentRanking = new FragmentRanking();
     private FragmentUser fragmentUser = new FragmentUser();
+    private MemberInfo userInfo = new MemberInfo();
 
 
     @Override
@@ -54,7 +58,15 @@ public class MainActivity extends AppCompatActivity {
             goTomyActivity(LoginActivity.class, true);
         }else{
 
-
+//            FirebaseFirestore db = FirebaseFirestore.getInstance();
+//            DocumentReference docRef =  db.collection("users").document(user.getUid());
+//            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//
+//                @Override
+//                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                    userInfo = documentSnapshot.toObject(MemberInfo.class);
+//                }
+//            });
         }
 
         initView();
@@ -91,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void replaceFragment(Fragment fragment) {
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelable("userInfoData", Parcels.wrap(userInfo));
+//        fragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment).commitAllowingStateLoss();

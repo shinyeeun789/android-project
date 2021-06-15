@@ -13,6 +13,7 @@ public class Post {
     public String uid;
     public String author;
     public String place;
+    public String userProfile;
     public String content;
     public String downloadImgUri;
     public int starCount = 0;
@@ -22,12 +23,13 @@ public class Post {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Post(String uid, String author, String place, String content, String downloadImgUri) {
+    public Post(String uid, String author, String place, String content, String downloadImgUri, String userProfile) {
         this.uid = uid;
         this.author = author;
         this.place = place;
         this.content = content;
         this.downloadImgUri = downloadImgUri;
+        this.userProfile = userProfile;
     }
 
     @Exclude
@@ -39,6 +41,7 @@ public class Post {
         result.put("content", content);
         result.put("starCount", starCount);
         result.put("urlImage", downloadImgUri);
+        result.put("profileImage", userProfile);
         result.put("stars", stars);
 
         return result;

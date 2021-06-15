@@ -32,6 +32,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -56,8 +59,6 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     private Button btnAddPost;
     private ImageView postimage;
 
-    public static final String INTENT_PATH = "path";
-    public static final String INTENT_MEDIA = "media";
 
     public static final int GALLEY_CODE = 10;
 
@@ -111,7 +112,6 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
 
-
     }
 
 
@@ -136,8 +136,12 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.insertBtn :          // 저장
 //                uploadImage(imageUrl);
-                writeNewPost(user.getUid(), userInfo.getName(), "윛피", txtcontent.getText().toString(), filePath);
-                finish();
+                if(txtcontent.getText() != null && filePath != null){
+                    pthotURL(user.getUid(), userInfo.getName(), "윛피", txtcontent.getText().toString(), filePath, userInfo.getProfimageURL());
+                    finish();
+                }else{
+                    Toast.makeText(WriteActivity.this, "내용또는 사진을 선택 해주세요", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
@@ -174,61 +178,75 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-
-    //포스트 저장
-    private void writeNewPost(String uId, String name, String location, String content, Uri filePath) {
-
-        //포스트 키값 가져오기
-        String key = mDatabase.child("posts").push().getKey();
-
-        try{
-            StorageReference storageRef = storage.getReference();
-            StorageReference riversRef = storageRef.child("photos/"+key+".png");
-            UploadTask uploadTask = riversRef.putFile(filePath);
-
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if(!task.isSuccessful()){
-                        throw task.getException();
-                    }
-                    // Continue with the task to get the download URL
-                    return riversRef.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if(task.isSuccessful()){
-                        Toast.makeText(WriteActivity.this, "업로드 성공", Toast.LENGTH_SHORT).show();
-
-                        @SuppressWarnings("VisibleForTests")
-                        Uri downloadUrl = task.getResult();
-
-                        Post post = new Post(uId, name, location, content, downloadUrl.toString());
-                        Map<String, Object> postValues = post.toMap();
-
-                        Map<String, Object> childUpdates = new HashMap<>();
-                        //전체 포스트 저장
-                        //post-postuid-내용
-                        childUpdates.put("/posts/" + key, postValues);
-                        //사용자별 포스트 저장
-                        //user-posts-사용자uid-내용
-                        childUpdates.put("/user-posts/" + uId + "/" + key, postValues);
-                        mDatabase.updateChildren(childUpdates);
-
-
-                    }else{
-                        Toast.makeText(WriteActivity.this, "업로드 실패", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-        }catch (NullPointerException e)
-        {
-            Toast.makeText(WriteActivity.this, "이미지 선택 안함", Toast.LENGTH_SHORT).show();
+    
+    // 포스트 저장
+    private void writeNewPost(Post post, String key){
+        try {
+            Map<String, Object> postValues = post.toMap();
+            Map<String, Object> childUpdates = new HashMap<>();
+            //전체 포스트 저장
+            //post-postuid-내용
+            childUpdates.put("/posts/" + key, postValues);
+            //사용자별 포스트 저장
+            //user-posts-사용자uid-내용
+            childUpdates.put("/user-posts/" + post.uid + "/" + key, postValues);
+            mDatabase.updateChildren(childUpdates);
+            Toast.makeText(WriteActivity.this, "업로드 성공", Toast.LENGTH_SHORT).show();
+        }catch (Exception e){
+            Toast.makeText(WriteActivity.this, "업로드 오류", Toast.LENGTH_SHORT).show();
         }
 
 
+    }
+
+    //사진 Url로
+    private void pthotURL(String uId, String name, String location, String content, Uri filePath, String ProfimageURL) {
+
+        //포스트 키값 가져오기
+        String key = mDatabase.child("posts").push().getKey();
+        
+        //업로드한 사진이 있으면
+        if(filePath != null){
+            try{
+                StorageReference storageRef = storage.getReference();
+                StorageReference riversRef = storageRef.child("photos/"+uId+"/"+key+".png");
+                UploadTask uploadTask = riversRef.putFile(filePath);
+
+                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if(!task.isSuccessful()){
+                            throw task.getException();
+                        }
+                        // Continue with the task to get the download URL
+                        return riversRef.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful()){
+                            Log.d("phtoURL 성공", "성공");
+
+                            @SuppressWarnings("VisibleForTests")
+                            Uri downloadUrl = task.getResult();
+                            Post post = new Post(uId, name, location, content, downloadUrl.toString(), ProfimageURL);
+                            writeNewPost(post, key);
+
+
+                        }else{
+                            Log.d("phtoURL 성공", "실패");
+                        }
+                    }
+                });
+
+            }catch (NullPointerException e)
+            {
+                Log.d("phtoURL 성공", "이미지 선택 안함");
+            }
+        }else {
+            Post post = new Post(uId, name, location, content, "null", ProfimageURL);
+            writeNewPost(post, key);
+        }
 
     }
 

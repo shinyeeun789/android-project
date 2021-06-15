@@ -97,7 +97,7 @@
             android:layout_marginTop="18dp"
             android:layout_marginBottom="23dp"
             android:fontFamily="@font/payboocotfextrabold"
-            android:text="2개"
+            android:text="0"
             app:layout_constraintBottom_toTopOf="@+id/item_content"
             app:layout_constraintStart_toEndOf="@+id/item_goodMark"
             app:layout_constraintTop_toBottomOf="@+id/item_image" />
