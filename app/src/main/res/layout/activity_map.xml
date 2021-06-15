@@ -11,4 +11,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/map_background"
+        tools:layout_editor_absoluteX="5dp"
+        tools:layout_editor_absoluteY="0dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:fontFamily="@font/payboocotfextrabold"
+        android:gravity="center"
+        android:text="[ PLACE ]"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

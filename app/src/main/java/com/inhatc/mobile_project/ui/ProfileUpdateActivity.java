@@ -174,7 +174,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                             Toast.makeText(ProfileUpdateActivity.this, "업로드 성공", Toast.LENGTH_SHORT).show();
 
                             @SuppressWarnings("VisibleForTests")
-                            Uri downloadUrl = task.getResult();//업로드한 사진 다운로드 url
+                            Uri downloadUrl = task.getResult();                                     //업로드한 사진 다운로드 url
                             strUrl = downloadUrl.toString();
 
                         }else{

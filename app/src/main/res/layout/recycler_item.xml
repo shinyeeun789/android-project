@@ -13,21 +13,13 @@
         android:layout_height="70dp"
         android:orientation="horizontal">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/item_profile"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="30dp"
-            app:cardCornerRadius="100dp">
-
-            <ImageView
-                android:id="@+id/item_userImage"
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/cuuuute" />
-        </androidx.cardview.widget.CardView>
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/cuuuute" />
 
         <TextView
             android:id="@+id/item_name"
@@ -45,7 +37,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv_place"
+            android:id="@+id/item_place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="226dp"

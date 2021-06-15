@@ -105,7 +105,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        btnPlaceDialog = (Button) findViewById(R.id.btnPlaceDialog);        // 나는 지금 여기에서 버튼
+        btnPlaceDialog = (Button) findViewById(R.id.btnPlaceDialog);        // 나는 지금 여기에 버튼
         btnPlaceDialog.setOnClickListener(this);
         geocoder = new Geocoder(this);
 
@@ -118,7 +118,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnPlaceDialog :          // '나는 지금 여기에서' 버튼
+            case R.id.btnPlaceDialog :          // '나는 지금 여기에' 버튼
                 showPlaceDialog();              // 다이얼로그 보여주기
                 break;
             case R.id.pDia_btnSearchPlace :     // 다이얼로그의 장소 찾기 버튼
@@ -127,6 +127,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                     replaceLatLng(address);
                 } else {
                     // addressList 사용해서 위도, 경도 파이어베이스에 저장
+                    btnPlaceDialog.setText(addressList.get(0).getAdminArea()+"에!");
                     placeDialog.dismiss();
                 }
                 break;
@@ -140,7 +141,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                     pthotURL(user.getUid(), userInfo.getName(), "윛피", txtcontent.getText().toString(), filePath, userInfo.getProfimageURL());
                     finish();
                 }else{
-                    Toast.makeText(WriteActivity.this, "내용또는 사진을 선택 해주세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WriteActivity.this, "내용 또는 사진을 선택해주세요", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -173,11 +174,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
-
     
     // 포스트 저장
     private void writeNewPost(Post post, String key){
