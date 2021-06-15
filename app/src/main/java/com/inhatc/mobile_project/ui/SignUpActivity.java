@@ -75,7 +75,13 @@ public class SignUpActivity extends AppCompatActivity {
                                     Toast.makeText(SignUpActivity.this, "이메일 사용이 가능합니다.", Toast.LENGTH_SHORT).show();
 
                                     //회원가입 성공시 정보입력 화면으로
-                                    goTomyActivity(ProfileUpdateActivity.class, true);
+                                    Intent profileIntent = new Intent(SignUpActivity.this, ProfileUpdateActivity.class);
+                                    profileIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    profileIntent.putExtra("userID", user.getUid());
+                                    startActivity(profileIntent);
+
+                                    //goTomyActivity(ProfileUpdateActivity.class, true);
 
                                 } else {
                                     // If sign in fails, display a message to the user.

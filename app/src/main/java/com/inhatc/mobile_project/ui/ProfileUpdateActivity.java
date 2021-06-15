@@ -57,6 +57,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
     private Uri filePath;
     private String strUrl;
     private MemberInfo userInfo = new MemberInfo();
+    private FirebaseUser user;
 
 
     @Override
@@ -71,6 +72,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_member_info);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();//현재 user값 받아서
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("userInfo");
         if(bundle != null){
@@ -150,7 +152,6 @@ public class ProfileUpdateActivity extends AppCompatActivity {
     }
 
     private void pthotURL(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();//현재 user값 받아서
 
         FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스 만들고
         StorageReference storageRef = storage.getReference();
@@ -192,7 +193,12 @@ public class ProfileUpdateActivity extends AppCompatActivity {
 
         }else {
             //프로필 사진을 선택하지않고 기본 값으로 하면
-            strUrl = userInfo.getProfimageURL();
+            if(userInfo.getProfimageURL() != null){
+                strUrl = userInfo.getProfimageURL();
+            }else {
+                strUrl = "https://firebasestorage.googleapis.com/v0/b/mobile-project-31597.appspot.com/o/profile%2Ficon_user.png?alt=media&token=1f46c19a-0173-4e29-ae8c-a05d2d84769c";
+            }
+
             profileUpdate();
 
         }
@@ -201,7 +207,6 @@ public class ProfileUpdateActivity extends AppCompatActivity {
     /*회원정보 업로드*/
     private void profileUpdate(){
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();//현재 user값 받아서
 
         FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스 만들고
         StorageReference storageRef = storage.getReference();

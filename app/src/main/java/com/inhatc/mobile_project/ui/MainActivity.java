@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
                     if(snapshot != null && snapshot.exists()){
                         Log.d(TAG, source + "data: " +snapshot.getData());
                         userInfo = snapshot.toObject(MemberInfo.class);
-                        initView();
 //                        userName = snapshot.getString("name");
 //                        userPrfile = snapshot.getString("profimageURL");
 
@@ -89,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             });
+            initView();
 
         }
 

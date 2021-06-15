@@ -93,9 +93,12 @@ public class FragmentUser extends Fragment {
         userName.setText(userInfo.getName());
         phoneNum.setText(userInfo.getPhonNum());
         birth.setText(userInfo.getBirthDay());
-        Glide.with(view)
-                .load(userInfo.getProfimageURL())
-                .into(imgView);
+        if(userInfo.getProfimageURL() != null){
+            Glide.with(view)
+                    .load(userInfo.getProfimageURL())
+                    .into(imgView);
+        }
+
 //        if(userInfo.getProfimageURL() != null){
 //            new DownloadFilesTask(imgView).execute(userInfo.getProfimageURL());
 //        }
@@ -116,7 +119,7 @@ public class FragmentUser extends Fragment {
                 case R.id.btn_log_out:
                     //로그아웃
                     FirebaseAuth.getInstance().signOut();
-                    Intent logoutintent = new Intent(getActivity(), ProfileUpdateActivity.class);
+                    Intent logoutintent = new Intent(getActivity(), MainActivity.class);
                     logoutintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     logoutintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(logoutintent);

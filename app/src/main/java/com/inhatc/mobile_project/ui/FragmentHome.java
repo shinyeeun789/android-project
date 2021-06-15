@@ -126,6 +126,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
+                postarray.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){// 반복문으로 데이터 List를 추출해냄
                     Post post = snapshot.getValue(Post.class); // Post 객체에 데이터 담기
                     postarray.add(post);
