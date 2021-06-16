@@ -64,34 +64,41 @@ public class SignUpActivity extends AppCompatActivity {
         if(email.length() > 0 && password.length() > 0 && passwordCheck.length() > 0){
             if(password.equals(passwordCheck)){
                 //paassword와 passwordcheck 같으면
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(!(password.length() < 7)){
+                    //비번은 6자리 이상
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    Toast.makeText(SignUpActivity.this, "이메일 사용이 가능합니다.", Toast.LENGTH_SHORT).show();
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        Toast.makeText(SignUpActivity.this, "이메일 사용이 가능합니다.", Toast.LENGTH_SHORT).show();
 
-                                    //회원가입 성공시 정보입력 화면으로
-                                    Intent profileIntent = new Intent(SignUpActivity.this, ProfileUpdateActivity.class);
-                                    profileIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    profileIntent.putExtra("userID", user.getUid());
-                                    startActivity(profileIntent);
+                                        //회원가입 성공시 정보입력 화면으로
+                                        Intent profileIntent = new Intent(SignUpActivity.this, ProfileUpdateActivity.class);
+                                        profileIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        profileIntent.putExtra("userID", user.getUid());
+                                        startActivity(profileIntent);
 
-                                    //goTomyActivity(ProfileUpdateActivity.class, true);
+                                        //goTomyActivity(ProfileUpdateActivity.class, true);
 
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    if(task.getException() != null){
-                                        Log.e("파이어베이스 오류",  task.getException().toString());
-                                        Toast.makeText(SignUpActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        if(task.getException() != null){
+                                            Log.e("파이어베이스 오류",  task.getException().toString());
+                                            Toast.makeText(SignUpActivity.this, "등록 에러! : 이메일 형식과 비밀번호 규칙을 확인해주세요", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+
+                }else {
+                    Toast.makeText(this, "비밀번호는 6자리 이상이여야 합니다.", Toast.LENGTH_SHORT).show();
+                }
+
             }else{
                 //비밀번호와 비밀번호 환이 불일치 시
                 Toast.makeText(this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();

@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
@@ -33,6 +35,8 @@ import org.parceler.Parcels;
 import java.io.Serializable;
 import java.lang.reflect.Member;
 
+import static java.lang.Thread.sleep;
+
 public class MainActivity extends AppCompatActivity {
 
     final String TAG="MainActivity";
@@ -41,6 +45,16 @@ public class MainActivity extends AppCompatActivity {
     private FragmentRanking fragmentRanking = new FragmentRanking();
     private FragmentUser fragmentUser = new FragmentUser();
     private MemberInfo userInfo = new MemberInfo();
+
+    Handler handler = new Handler();
+    class handler extends Handler{
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Log.e("handle", "handle");
+            initView();
+        }
+    }
 
 
     @Override
@@ -62,35 +76,58 @@ public class MainActivity extends AppCompatActivity {
         if(user == null){
             //로그인이 안되있으면 로그인 화면으로
             goTomyActivity(LoginActivity.class, true);
-        }else{
+        }
 
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference docRef =  db.collection("users").document(user.getUid());
-            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException error) {
-                    if(error != null){
-                        Log.w(TAG, "Listen failed.", error);
-                        return;
-                    }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef =  db.collection("users").document(user.getUid());
 
-                    String source = snapshot != null && snapshot.getMetadata().hasPendingWrites() ? "Local" : "Server";
-                    if(snapshot != null && snapshot.exists()){
-                        Log.d(TAG, source + "data: " +snapshot.getData());
-                        userInfo = snapshot.toObject(MemberInfo.class);
-//                        userName = snapshot.getString("name");
-//                        userPrfile = snapshot.getString("profimageURL");
+//        Task<DocumentSnapshot> task = docRef.get();
+//        if(task.isSuccessful()){
+//            DocumentSnapshot doc = task.getResult();
+//            userInfo = doc.toObject(MemberInfo.class);
+//        }
+//
+//        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                DocumentSnapshot doc = task.getResult();
+//                if(doc.exists()){
+//                    userInfo = doc.toObject(MemberInfo.class);
+//                }
+//            }
+//        });
 
-                    }else {
-                        Log.d(TAG, source + " data: null");
-                    }
 
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException error) {
+                if(error != null){
+                    Log.w(TAG, "Listen failed.", error);
+                    return;
                 }
 
-            });
-            initView();
+                String source = snapshot != null && snapshot.getMetadata().hasPendingWrites() ? "Local" : "Server";
+                if(snapshot != null && snapshot.exists()){
+                    Log.d(TAG, source + "data: " +snapshot.getData());
+                    userInfo = snapshot.toObject(MemberInfo.class);
+//                    Message msg = handler.obtainMessage();
+//                    handler.sendMessage(msg);
 
-        }
+                }else {
+                    Log.d(TAG, source + " data: null");
+                }
+            }
+        });
+//        try
+//        {
+//            sleep(1500);
+//        } catch (InterruptedException e)
+//        {
+//            e.printStackTrace();
+//        }
+
+        //initView();
+
 
     }
 

@@ -3,9 +3,11 @@ package com.inhatc.mobile_project.db;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -15,7 +17,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Source;
 import com.inhatc.mobile_project.ui.ProfileUpdateActivity;
 
@@ -28,6 +32,8 @@ import java.net.URL;
 
 @Parcel
 public class MemberInfo implements MemberImple{
+
+    final String TAG = "MemberIfo";
 
     private String name;
     private String phonNum;
@@ -106,6 +112,27 @@ public class MemberInfo implements MemberImple{
 //            }
 //        })
 
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException error) {
+                if(error != null){
+                    Log.w(TAG, "Listen failed.", error);
+                    return;
+                }
+
+                String source = snapshot != null && snapshot.getMetadata().hasPendingWrites() ? "Local" : "Server";
+                if(snapshot != null && snapshot.exists()){
+                    Log.d(TAG, source + "data: " +snapshot.getData());
+                    name = snapshot.getString("name");
+                    phonNum = snapshot.getString("phonNum");
+                    birthDay = snapshot.getString("birth");
+                    profimageURL = snapshot.getString("profimageURL");
+                }else {
+                    Log.d(TAG, source + " data: null");
+                }
+            }
+        });
+
         docRef.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -113,7 +140,7 @@ public class MemberInfo implements MemberImple{
                 if(doc.exists()){
                     name = doc.getString("name");
                     phonNum = doc.getString("phonNum");
-                    birthDay = doc.getString("birth");
+                    birthDay = doc.getString("birthDays");
                     profimageURL = doc.getString("profimageURL");
                 }
             }

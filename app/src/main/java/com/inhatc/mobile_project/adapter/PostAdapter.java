@@ -1,6 +1,9 @@
 package com.inhatc.mobile_project.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +15,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.inhatc.mobile_project.DownloadFilesTask;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.Post;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
+    private Geocoder geocoder;
     private ArrayList<Post> postItems;
     private Context mContext;
     private DatabaseReference mDatabase;
@@ -48,6 +54,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View holder = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
         mContext = parent.getContext();
+        geocoder = new Geocoder(mContext);
         return new ViewHolder(holder);
     }
 
@@ -62,8 +69,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 .into(holder.posterProfile);
         holder.poster_id.setText(postItems.get(position).getAuthor());
         holder.tv_contents.setText(postItems.get(position).getPostcontent());
-        holder.tv_location.setText(postItems.get(position).getPlace());
+
+        try {
+            List<Address> addressList = geocoder.getFromLocation(postItems.get(position).getmLatitude(), postItems.get(position).getmLongitude(), 10);
+            holder.tv_location.setText(addressList.get(0).getAddressLine(0)+"에서");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         holder.likeCounter.setText(String.valueOf(postItems.get(position).getStarCount()));
+
+        //view 클릭시
+        //holder.likeImg.setOnClickListener(ne);
 
     }
 

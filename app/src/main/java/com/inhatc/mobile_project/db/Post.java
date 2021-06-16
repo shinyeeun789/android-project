@@ -1,22 +1,25 @@
 package com.inhatc.mobile_project.db;
 
+import android.location.Address;
 import android.net.Uri;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @IgnoreExtraProperties
 public class Post {
     private String uid;
     private String author;
-    private String place;
     private String postcontent;
     private String title;
     private String downloadImgUri;
     private String profileImg;
+    private double mLatitude;
+    private double mLongitude;
     private int starCount = 0;
     public Map<String, Boolean> stars = new HashMap<>();
 
@@ -24,12 +27,13 @@ public class Post {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Post(String uid, String author, String place, String postcontent, String title, String downloadImgUri, String profileImg) {
+    public Post(String uid, String author, double mLatitude, double mLongitude, String postcontent, String title, String downloadImgUri, String profileImg) {
         this.uid = uid;
         this.author = author;
-        this.place = place;
         this.postcontent = postcontent;
         this.downloadImgUri = downloadImgUri;
+        this.mLatitude = mLatitude;
+        this.mLongitude = mLongitude;
         this.title = title;
         this.profileImg = profileImg;
     }
@@ -39,7 +43,8 @@ public class Post {
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid", uid);
         result.put("author", author);
-        result.put("place", place);
+        result.put("mLatitude", mLatitude);
+        result.put("mLongitude", mLongitude);
         result.put("postcontent", postcontent);
         result.put("starCount", starCount);
         result.put("downloadImgUri", downloadImgUri);
@@ -75,12 +80,20 @@ public class Post {
         this.author = author;
     }
 
-    public String getPlace() {
-        return place;
+    public double getmLatitude() {
+        return mLatitude;
     }
 
-    public void setPlace(String place) {
-        this.place = place;
+    public void setmLatitude(double mLatitude) {
+        this.mLatitude = mLatitude;
+    }
+
+    public double getmLongitude() {
+        return mLongitude;
+    }
+
+    public void setmLongitude(double mLongitude) {
+        this.mLongitude = mLongitude;
     }
 
     public String getPostcontent() {

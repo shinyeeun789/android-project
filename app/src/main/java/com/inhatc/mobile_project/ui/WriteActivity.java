@@ -152,8 +152,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.insertBtn :          // 저장
 //                uploadImage(imageUrl);
-                if(txtcontent.getText() != null && filePath != null){
-                    pthotURL(user.getUid(), userInfo.getName(), "윛피", txtcontent.getText().toString(), filePath, etTilte.getText().toString());
+                if(txtcontent.getText() != null && filePath != null && addressList != null){
+                    pthotURL(user.getUid(), userInfo.getName(),txtcontent.getText().toString(), filePath, etTilte.getText().toString());
                     finish();
                 }else{
                     Toast.makeText(WriteActivity.this, "내용 또는 사진을 선택해주세요", Toast.LENGTH_SHORT).show();
@@ -213,7 +213,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     }
 
     //사진 Url로
-    private void pthotURL(String uId, String name, String location, String content, Uri filePath, String title) {
+    private void pthotURL(String uId, String name, String content, Uri filePath, String title) {
 
         //포스트 키값 가져오기
         String key = mDatabase.child("posts").push().getKey();
@@ -242,7 +242,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
                             @SuppressWarnings("VisibleForTests")
                             Uri downloadUrl = task.getResult();
-                            Post post = new Post(uId, name, location, content, title, downloadUrl.toString(), userInfo.getProfimageURL());
+                            Post post = new Post(uId, name, addressList.get(0).getLatitude(), addressList.get(0).getLongitude(), content, title, downloadUrl.toString(), userInfo.getProfimageURL());
                             writeNewPost(post, key);
 
 
@@ -257,7 +257,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 Log.d("phtoURL 성공", "이미지 선택 안함");
             }
         }else {
-            Post post = new Post(uId, name, location, content, "null", null, userInfo.getProfimageURL());
+            Post post = new Post(uId, name, addressList.get(0).getLatitude(), addressList.get(0).getLongitude(), content, "null", null, userInfo.getProfimageURL());
             writeNewPost(post, key);
         }
 
