@@ -38,6 +38,8 @@ import com.inhatc.mobile_project.db.Post;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class FragmentHome extends Fragment implements View.OnClickListener {
     final String TAG = "FragementHome";
@@ -49,11 +51,9 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
     private DatabaseReference databaseReference;
     private Bundle bundle = new Bundle();
 
-    private RecyclerView mRv_posts;
+    private RecyclerView pRv_posts;
     private ArrayList<Post> postarray;
 
-    private String userName;
-    private String userPrfile;
 
     @Nullable
     @Override
@@ -106,21 +106,21 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
 
         btnGoWrite = (Button) view.findViewById(R.id.btnGoWrite);
         btnGoWrite.setOnClickListener(this);
-        
-        mRv_posts = (RecyclerView) view.findViewById(R.id.homeRecyclerView);
+
+        pRv_posts = (RecyclerView) view.findViewById(R.id.homeRecyclerView);
 
 
 
-        mRv_posts.setHasFixedSize(true);// 리사이클러뷰 기존성능 강화
+        pRv_posts.setHasFixedSize(true);// 리사이클러뷰 기존성능 강화
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mRv_posts.setLayoutManager(layoutManager);
+        pRv_posts.setLayoutManager(layoutManager);
         postarray = new ArrayList<>();//post 객체 담을 어레이 리스트 (어댑터 쪽으로)
 
         pDatabase = FirebaseDatabase.getInstance();// 파이어베이스 데이터베이스 연동
         databaseReference = pDatabase.getReference("posts"); // DB 테이블 연결
 
         pAdapter = new PostAdapter(postarray, getContext());
-        mRv_posts.setAdapter(pAdapter); //리사이클 뷰에 어댑터 연결
+        pRv_posts.setAdapter(pAdapter); //리사이클 뷰에 어댑터 연결
 
         ValueEventListener postListener = new ValueEventListener() {
             @Override
@@ -131,6 +131,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                     Post post = snapshot.getValue(Post.class); // Post 객체에 데이터 담기
                     postarray.add(post);
                 }
+                Collections.reverse(postarray);
                 pAdapter.setItem(postarray);
 
             }

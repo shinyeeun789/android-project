@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.inhatc.mobile_project.DownloadFilesTask;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.Post;
+import com.inhatc.mobile_project.ui.MapActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,12 +36,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private Geocoder geocoder;
     private ArrayList<Post> postItems;
     private Context mContext;
-    private DatabaseReference mDatabase;
+    private DatabaseReference pDatabase;
     private int index;
     private FirebaseUser user;
     private boolean isLikePost;
 
     private Map<String, Boolean> stars = new HashMap<>();
+
 
     public PostAdapter(ArrayList<Post> postItems, Context context) {
         this.postItems = postItems;
@@ -64,13 +66,28 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         mContext = parent.getContext();
         geocoder = new Geocoder(mContext);
         user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        pDatabase = FirebaseDatabase.getInstance().getReference();
         return new ViewHolder(holder);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.onBind(holder, postItems.get(position), position);
+
+        //view 클릭시 구글 맵 표시holder.itemView
+        // 이미지 클릭 시 이동은 holder.postImage.setOnClickListener로 바꾸면 됨
+        holder.postImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(mContext, MapActivity.class);
+                // 위도 경도 값 구하는거
+                //postItems.get(position).getmLatitude()
+                //postItems.get(position).getmLongitude()
+                mContext.startActivity(i);
+
+            }
+        });
     }
 
 
@@ -82,7 +99,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         public ViewHolder(@NonNull View view) {
             super(view);
-            //context = view.findViewById(R.id.textView3);
             poster_id = view.findViewById(R.id.item_name);
             tv_contents = view.findViewById(R.id.item_content);
             tv_location = view.findViewById(R.id.item_place);
@@ -126,17 +142,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
 
             if(!(post.getUid().equals(user.getUid()))){
-                likeImg.setActivated(false);
+
                 //좋아요 클릭시
                 likeImg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        stars = post.getStars();
+                        if(stars.get(user.getUid()) != null){
+                            isLikePost = stars.get(user.getUid());
+                        }else {
+                            isLikePost = false;
+                        }
 
                         //좋아요 취소
                         if(isLikePost){
                             isLikePost = false;
                             likeImg.setImageResource(R.drawable.icon_empty_good);
-                            stars.put(user.getUid(), false);
+                            stars.put(user.getUid(), isLikePost);
                             post.setStarCount(post.getStarCount()-1);
 
                             Map<String, Object> taskMap = new HashMap<String, Object>();
@@ -145,7 +167,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
                             taskMap.put("/user-posts/" + post.getUid() + "/" + post.getPostId() + "/stars", stars);
                             taskMap.put("/user-posts/" + post.getUid() + "/" + post.getPostId() + "/starCount", post.getStarCount());
-                            mDatabase.updateChildren(taskMap);
+                            pDatabase.updateChildren(taskMap);
 
                         }else {
                             //좋아요
@@ -153,7 +175,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                             likeImg.setImageResource(R.drawable.icon_good);
                             post.setStarCount(post.getStarCount()+1);
                             likeCounter.setText(String.valueOf(post.getStarCount()));
-                            stars.put(user.getUid(), true);
+                            stars.put(user.getUid(), isLikePost);
 
 
                             Map<String, Object> taskMap = new HashMap<String, Object>();
@@ -162,7 +184,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
                             taskMap.put("/user-posts/" + post.getUid() + "/" + post.getPostId() + "/stars", stars);
                             taskMap.put("/user-posts/" + post.getUid() + "/" + post.getPostId() + "/starCount", post.getStarCount());
-                            mDatabase.updateChildren(taskMap);
+                            pDatabase.updateChildren(taskMap);
 
                         }
 

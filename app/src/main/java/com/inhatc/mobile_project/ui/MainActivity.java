@@ -85,9 +85,9 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef =  db.collection("users").document(user.getUid());
+//
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        DocumentReference docRef =  db.collection("users").document(user.getUid());
 
 //        Task<DocumentSnapshot> task = docRef.get();
 //        if(task.isSuccessful()){

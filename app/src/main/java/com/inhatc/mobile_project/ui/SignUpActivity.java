@@ -64,7 +64,7 @@ public class SignUpActivity extends AppCompatActivity {
         if(email.length() > 0 && password.length() > 0 && passwordCheck.length() > 0){
             if(password.equals(passwordCheck)){
                 //paassword와 passwordcheck 같으면
-                if(!(password.length() < 7)){
+                if(!(password.length() < 6)){
                     //비번은 6자리 이상
                     mAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
