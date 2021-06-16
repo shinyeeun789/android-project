@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.inhatc.mobile_project.LoddingActivity;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
 import com.inhatc.mobile_project.db.Post;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentRanking fragmentRanking = new FragmentRanking();
     private FragmentUser fragmentUser = new FragmentUser();
     private MemberInfo userInfo = new MemberInfo();
+    private Bundle bundle = new Bundle();
 
     Handler handler = new Handler();
     class handler extends Handler{
@@ -76,7 +78,13 @@ public class MainActivity extends AppCompatActivity {
         if(user == null){
             //로그인이 안되있으면 로그인 화면으로
             goTomyActivity(LoginActivity.class, true);
+
+        }else {
+            Intent intent = new Intent(this, LoddingActivity.class);
+            startActivityForResult(intent, 1);
+
         }
+
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef =  db.collection("users").document(user.getUid());
@@ -98,26 +106,26 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
 
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException error) {
-                if(error != null){
-                    Log.w(TAG, "Listen failed.", error);
-                    return;
-                }
-
-                String source = snapshot != null && snapshot.getMetadata().hasPendingWrites() ? "Local" : "Server";
-                if(snapshot != null && snapshot.exists()){
-                    Log.d(TAG, source + "data: " +snapshot.getData());
-                    userInfo = snapshot.toObject(MemberInfo.class);
-//                    Message msg = handler.obtainMessage();
-//                    handler.sendMessage(msg);
-
-                }else {
-                    Log.d(TAG, source + " data: null");
-                }
-            }
-        });
+//        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException error) {
+//                if(error != null){
+//                    Log.w(TAG, "Listen failed.", error);
+//                    return;
+//                }
+//
+//                String source = snapshot != null && snapshot.getMetadata().hasPendingWrites() ? "Local" : "Server";
+//                if(snapshot != null && snapshot.exists()){
+//                    Log.d(TAG, source + "data: " +snapshot.getData());
+//                    userInfo = snapshot.toObject(MemberInfo.class);
+////                    Message msg = handler.obtainMessage();
+////                    handler.sendMessage(msg);
+//
+//                }else {
+//                    Log.d(TAG, source + " data: null");
+//                }
+//            }
+//        });
 //        try
 //        {
 //            sleep(1500);
@@ -126,8 +134,23 @@ public class MainActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
 
-        initView();
 
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1){
+            bundle = data.getBundleExtra("userInfoData");
+            if(bundle != null){
+                Object value = Parcels.unwrap(bundle.getParcelable("userInfoData"));
+                userInfo = (MemberInfo) value;
+            }
+            initView();
+//            Bundle bundle = new Bundle();
+//            bundle.putParcelable("userInfoData", Parcels.wrap(userInfo));
+        }
     }
 
     private void initView() {
@@ -161,8 +184,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void replaceFragment(Fragment fragment) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("userInfoData", Parcels.wrap(userInfo));
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
