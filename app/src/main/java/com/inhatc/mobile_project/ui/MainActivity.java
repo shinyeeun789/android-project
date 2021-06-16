@@ -126,8 +126,7 @@ public class MainActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
 
-        //initView();
-
+        initView();
 
     }
 

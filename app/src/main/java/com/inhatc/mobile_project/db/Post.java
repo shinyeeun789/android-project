@@ -14,6 +14,7 @@ import java.util.Map;
 public class Post {
     private String uid;
     private String author;
+    private String postId;
     private String postcontent;
     private String title;
     private String downloadImgUri;
@@ -27,7 +28,8 @@ public class Post {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Post(String uid, String author, double mLatitude, double mLongitude, String postcontent, String title, String downloadImgUri, String profileImg) {
+    public Post(String postId, String uid, String author, double mLatitude, double mLongitude, String postcontent, String title, String downloadImgUri, String profileImg) {
+        this.postId = postId;
         this.uid = uid;
         this.author = author;
         this.postcontent = postcontent;
@@ -41,6 +43,7 @@ public class Post {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
+        result.put("postId", postId);
         result.put("uid", uid);
         result.put("author", author);
         result.put("mLatitude", mLatitude);
@@ -55,6 +58,14 @@ public class Post {
         return result;
     }
 
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
 
     public String getProfileImg() {
         return profileImg;
@@ -126,5 +137,13 @@ public class Post {
 
     public void setStarCount(int starCount) {
         this.starCount = starCount;
+    }
+
+    public Map<String, Boolean> getStars() {
+        return stars;
+    }
+
+    public void setStars(Map<String, Boolean> stars) {
+        this.stars = stars;
     }
 }

@@ -193,16 +193,17 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     }
     
     // 포스트 저장
-    private void writeNewPost(Post post, String key){
+    private void writeNewPost(Post post){
         try {
             Map<String, Object> postValues = post.toMap();
             Map<String, Object> childUpdates = new HashMap<>();
             //전체 포스트 저장
             //post-postuid-내용
-            childUpdates.put("/posts/" + key, postValues);
+
+            childUpdates.put("/posts/" + post.getPostId(), postValues);
             //사용자별 포스트 저장
             //user-posts-사용자uid-내용
-            childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
+            childUpdates.put("/user-posts/" + post.getUid() + "/" + post.getPostId(), postValues);
             mDatabase.updateChildren(childUpdates);
             Toast.makeText(WriteActivity.this, "업로드 성공", Toast.LENGTH_SHORT).show();
         }catch (Exception e){
@@ -242,8 +243,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
                             @SuppressWarnings("VisibleForTests")
                             Uri downloadUrl = task.getResult();
-                            Post post = new Post(uId, name, addressList.get(0).getLatitude(), addressList.get(0).getLongitude(), content, title, downloadUrl.toString(), userInfo.getProfimageURL());
-                            writeNewPost(post, key);
+                            Post post = new Post(key, uId, name, addressList.get(0).getLatitude(), addressList.get(0).getLongitude(), content, title, downloadUrl.toString(), userInfo.getProfimageURL());
+                            writeNewPost(post);
 
 
                         }else{
@@ -257,8 +258,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 Log.d("phtoURL 성공", "이미지 선택 안함");
             }
         }else {
-            Post post = new Post(uId, name, addressList.get(0).getLatitude(), addressList.get(0).getLongitude(), content, "null", null, userInfo.getProfimageURL());
-            writeNewPost(post, key);
+            Post post = new Post(key, uId, name, addressList.get(0).getLatitude(), addressList.get(0).getLongitude(), content, "null", null, userInfo.getProfimageURL());
+            writeNewPost(post);
         }
 
     }
