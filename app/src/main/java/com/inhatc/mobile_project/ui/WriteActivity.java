@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -75,7 +76,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     private DatabaseReference mDatabase;
     private FirebaseStorage storage;
     private FirebaseDatabase database;
-    private Bundle bundle = new Bundle();
+    private Bundle userBundle = new Bundle();
+    private Bundle postBundle = new Bundle();
 
 //    private String userName, userProfile;
 
@@ -90,6 +92,11 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     private ImageView selectedImageVIew;
     private EditText selectedEditText;
     private ArrayList<String> pathList = new ArrayList<>();
+
+    private Post postItems = new Post();
+    private boolean isUpdate = false;
+
+    private String key;
     
 
     @Override
@@ -97,19 +104,9 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write);
 
-        Intent intent = getIntent();
-//        userName = intent.getStringExtra("userName");
-//        userProfile = intent.getStringExtra("userProfile");
-        bundle = intent.getBundleExtra("userInfoData");
-        if(bundle != null){
-            Object value = Parcels.unwrap(bundle.getParcelable("userInfoData"));
-            userInfo = (MemberInfo) value;
-        }
-
         txtcontent = findViewById(R.id.insertContent);
         btnAddPost = findViewById(R.id.insertBtn);
         postimage = findViewById(R.id.insertImg);
-        //etTilte = findViewById(R.id.EtTitle);
 
         btnAddPost.setOnClickListener(this);
         postimage.setOnClickListener(this);
@@ -126,6 +123,44 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
+
+        Intent intent = getIntent();
+
+        userBundle = intent.getBundleExtra("userInfoData");
+        postBundle = intent.getBundleExtra("UpdatePostData");
+        //추가 하면
+        if(userBundle != null){
+            Object value = Parcels.unwrap(userBundle.getParcelable("userInfoData"));
+            userInfo = (MemberInfo) value;
+            isUpdate = false;
+
+
+        }
+        //수정 하면
+        if(postBundle != null){
+            Object value = Parcels.unwrap(postBundle.getParcelable("UpdatePostData"));
+            postItems = (Post) value;
+            isUpdate = true;
+            userInfo.setProfimageURL(postItems.getProfileImg());
+            userInfo.setName(postItems.getAuthor());
+            initView();
+
+        }
+
+    }
+
+    private void initView() {
+        txtcontent.setText(postItems.getPostcontent());
+        Glide.with(this)
+                .load(postItems.getDownloadImgUri())
+                .into(postimage);
+
+        try {
+            addressList = geocoder.getFromLocation(postItems.getmLatitude(), postItems.getmLongitude(), 10);
+            btnPlaceDialog.setText(addressList.get(0).getAdminArea()+"에서");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -152,9 +187,11 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.insertBtn :          // 저장
 //                uploadImage(imageUrl);
-                if(txtcontent.getText() != null && filePath != null && addressList != null){
-                    pthotURL(user.getUid(), userInfo.getName(),txtcontent.getText().toString(), filePath);
-                    finish();
+                if(txtcontent.getText() != null && addressList != null){
+                    if(filePath != null || postItems.getDownloadImgUri() != null){
+                        pthotURL(user.getUid(), userInfo.getName(),txtcontent.getText().toString(), filePath);
+                        finish();
+                    }
                 }else{
                     Toast.makeText(WriteActivity.this, "내용 또는 사진을 선택해주세요", Toast.LENGTH_SHORT).show();
                 }
@@ -217,9 +254,14 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     private void pthotURL(String uId, String name, String content, Uri filePath) {
 
         //포스트 키값 가져오기
-        String key = mDatabase.child("posts").push().getKey();
+        if(!isUpdate){
+            key = mDatabase.child("posts").push().getKey();
+        }else {
+            key = postItems.getPostId();
+        }
+
         
-        //업로드한 사진이 있으면
+        //선택해서 업로드한 사진이 있으면
         if(filePath != null){
             try{
                 StorageReference storageRef = storage.getReference();
@@ -258,7 +300,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 Log.d("phtoURL 성공", "이미지 선택 안함");
             }
         }else {
-            Post post = new Post(key, uId, name, addressList.get(0).getLatitude(), addressList.get(0).getLongitude(), content, null, userInfo.getProfimageURL());
+            Post post = new Post(key, uId, name, addressList.get(0).getLatitude(), addressList.get(0).getLongitude(), content, postItems.getDownloadImgUri(), userInfo.getProfimageURL());
             writeNewPost(post);
         }
 
@@ -297,6 +339,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
         try {
             addressList = geocoder.getFromLocationName(address, 10);
+//            postItems.setmLatitude(addressList.get(0).getLatitude());
+//            postItems.setmLongitude(addressList.get(0).getLongitude(), addressList.get(0).getLatitude());
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("test", "입출력 오류 - 서버에서 주소변환시 에러 발생");

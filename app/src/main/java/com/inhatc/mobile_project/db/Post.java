@@ -6,11 +6,15 @@ import android.net.Uri;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @IgnoreExtraProperties
+@Parcel
 public class Post {
     private String uid;
     private String author;
@@ -28,6 +32,7 @@ public class Post {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
+    @ParcelConstructor
     public Post(String postId, String uid, String author, double mLatitude, double mLongitude, String postcontent, String downloadImgUri, String profileImg) {
         this.postId = postId;
         this.uid = uid;
@@ -145,4 +150,5 @@ public class Post {
     public void setStars(Map<String, Boolean> stars) {
         this.stars = stars;
     }
+
 }

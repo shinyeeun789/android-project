@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -31,6 +32,9 @@ import com.inhatc.mobile_project.DownloadFilesTask;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.Post;
 import com.inhatc.mobile_project.ui.MapActivity;
+import com.inhatc.mobile_project.ui.WriteActivity;
+
+import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -217,6 +221,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 btn_edit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //수정 삭제 메뉴 모여주는 팝업 메뉴
                         PopupMenu popup = new PopupMenu(mContext, v);
                         popup.getMenuInflater().inflate(R.menu.edit_menu, popup.getMenu());
 
@@ -231,14 +236,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                                         onDeleteContent(position);
                                         break;
                                     case R.id.action_modify:
-                                        //수정
+                                        Bundle bundle = new Bundle();
+                                        bundle.putParcelable("UpdatePostData", Parcels.wrap(post));
 
+                                        Intent intent = new Intent(mContext, WriteActivity.class);
+                                        intent.putExtra("UpdatePostData", bundle);
+                                        mContext.startActivity(intent);
                                         break;
                                     default:
                                         break;
                                 }
                                 return false;
-
                             }
                         });
                         popup.show();

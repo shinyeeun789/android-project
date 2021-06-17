@@ -95,6 +95,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         }
         user = FirebaseAuth.getInstance().getCurrentUser();//현재 사용자 가져오기
 
+
         btnGoWrite = (Button) view.findViewById(R.id.btnGoWrite);
         btn_allpost = view.findViewById(R.id.btn_allpost);
         btn_mypot = view.findViewById(R.id.btn_mypot);
@@ -117,6 +118,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                 Intent intentWrite = new Intent(getActivity(), WriteActivity.class);;
                 intentWrite.putExtra("userInfoData",bundle);
                 startActivity(intentWrite);
+                isAllPost = true;
                 break;
             case R.id.btn_allpost:
                 isAllPost = true;
@@ -154,6 +156,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
+                isAllPost = true;
                 postarray.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){// 반복문으로 데이터 List를 추출해냄
                     Post post = snapshot.getValue(Post.class); // Post 객체에 데이터 담기
