@@ -53,13 +53,13 @@
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:layout_marginStart="28dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="44dp"
             android:layout_marginEnd="43dp"
             android:src="@drawable/icon_camera"
             app:layout_constraintEnd_toStartOf="@+id/btnPlaceDialog"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EtTitle" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btnPlaceDialog"
@@ -76,19 +76,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.93" />
-
-        <EditText
-            android:id="@+id/EtTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="45dp"
-            android:layout_marginEnd="30dp"
-            android:hint="제목"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/insertContent"

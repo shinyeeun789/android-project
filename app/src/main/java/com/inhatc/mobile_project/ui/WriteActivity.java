@@ -109,7 +109,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
         txtcontent = findViewById(R.id.insertContent);
         btnAddPost = findViewById(R.id.insertBtn);
         postimage = findViewById(R.id.insertImg);
-        etTilte = findViewById(R.id.EtTitle);
+        //etTilte = findViewById(R.id.EtTitle);
 
         btnAddPost.setOnClickListener(this);
         postimage.setOnClickListener(this);

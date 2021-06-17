@@ -221,7 +221,6 @@ public class ProfileUpdateActivity extends AppCompatActivity {
         if(strname.length() > 0 && strphoneNum.length() > 0 && strbirthDay.length() > 0){
             if(strphoneNum.charAt(3) == '-' && strphoneNum.charAt(8) == '-'){
                 if(strbirthDay.charAt(4) == '.' && strbirthDay.charAt(7) == '.'){
-
                     // Access a Cloud Firestore instance from your Activity
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     //데이터 베이스에 회원정보 넣어주기
