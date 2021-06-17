@@ -4,20 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoddingActivity">
+    tools:context=".LoddingActivity"
+    android:background="@drawable/loading_food">
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="330dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginBottom="353dp"
-        android:text="Lodding......"
+        android:layout_marginStart="107dp"
+        android:layout_marginTop="136dp"
+        android:layout_marginEnd="108dp"
+        android:fontFamily="@font/payboocotfextrabold"
+        android:text="Loading......"
+        android:textColor="@color/white"
         android:textSize="36sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

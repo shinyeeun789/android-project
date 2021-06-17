@@ -49,17 +49,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     private Context mContext;
     private DatabaseReference pDatabase;
 
-    //현재 보여지고 있는 리스트의 데이터 편집 말고
+    // 현재 보여지고 있는 리스트의 데이터 편집 말고
     // 예를 들면 post가 보여지고 이를 편집, 삭제 시 user-post도 같이 편집 삭제 가능하게
-   // private DatabaseReference subDatabaseRef;
+    // private DatabaseReference subDatabaseRef;
 
     private int index;
     private FirebaseUser user;
     private boolean isLikePost;
 
-
     private Map<String, Boolean> stars = new HashMap<>();
-
 
     public PostAdapter(ArrayList<Post> postItems, Context context) {
         this.postItems = postItems;
@@ -102,6 +100,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 // 위도 경도 값 구하는거
                 //postItems.get(position).getmLatitude()
                 //postItems.get(position).getmLongitude()
+                i.putExtra("latitude", postItems.get(position).getmLatitude());
+                i.putExtra("longitude", postItems.get(position).getmLongitude());
                 mContext.startActivity(i);
 
             }

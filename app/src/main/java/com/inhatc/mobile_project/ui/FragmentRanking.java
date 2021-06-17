@@ -39,7 +39,6 @@ public class FragmentRanking extends Fragment {
 
     private Calendar cToday = Calendar.getInstance(), startDay = Calendar.getInstance(), endDay = Calendar.getInstance();
     private TextView rankingWeek;
-    private Button test;
 
     private RankingAdapter rAdapter;
     private RecyclerView rv_ranking;
@@ -58,7 +57,6 @@ public class FragmentRanking extends Fragment {
 
 
         rankingWeek = (TextView) view.findViewById(R.id.tv_rankingWeek);
-        test = (Button) view.findViewById(R.id.test);
 
         rv_ranking = (RecyclerView) view.findViewById(R.id.rankingRecyclerView);
 
@@ -67,15 +65,6 @@ public class FragmentRanking extends Fragment {
         startDay.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         endDay.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
         rankingWeek.setText(String.format("%02d월 %02d일 ~ %02d월 %02d일", startDay.getTime().getMonth()+1, startDay.getTime().getDate(), endDay.getTime().getMonth()+1, endDay.getTime().getDate()));
-
-        // 구글맵 테스트!!! 테스트 후 삭제 예정
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), MapActivity.class);
-                startActivity(i);
-            }
-        });
 
         // 좋아요 수 계산
 
