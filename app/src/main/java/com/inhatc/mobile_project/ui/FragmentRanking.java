@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.inhatc.mobile_project.R;
+import com.inhatc.mobile_project.RankingItems;
+import com.inhatc.mobile_project.adapter.RankingAdapter;
 import com.inhatc.mobile_project.db.MemberInfo;
 import com.inhatc.mobile_project.db.Post;
 
@@ -45,14 +47,15 @@ public class FragmentRanking extends Fragment {
     private TextView rankingWeek;
     private Button test;
 
+    private RankingAdapter rAdapter;
+    private RecyclerView rv_ranking;
 
     private FirebaseDatabase rDatabase;
     private DatabaseReference databaseReference;
-    private ArrayList<Post> postarray;
     private HashMap<String, Post> userMap = new HashMap<String, Post>();
     private HashMap<String, Integer> starCntMap = new HashMap<String, Integer>();
-    private ArrayList<String> usersArray = new ArrayList<String>();
     private List<Entry<String, Integer>> list_entries;
+    private ArrayList<RankingItems> rankinglist;
 
     @Nullable
     @Override
@@ -62,7 +65,8 @@ public class FragmentRanking extends Fragment {
 
         rankingWeek = (TextView) view.findViewById(R.id.tv_rankingWeek);
         test = (Button) view.findViewById(R.id.test);
-        //pRv_posts = (RecyclerView) view.findViewById(R.id.homeRecyclerView);
+
+        rv_ranking = (RecyclerView) view.findViewById(R.id.rankingRecyclerView);
 
         startDay.set(cToday.getTime().getYear(), cToday.getTime().getMonth(), cToday.getTime().getDate());      startDay.getTime();
         endDay.set(cToday.getTime().getYear(), cToday.getTime().getMonth(), cToday.getTime().getDate());      endDay.getTime();
@@ -81,12 +85,18 @@ public class FragmentRanking extends Fragment {
 
         // 좋아요 수 계산
 
-//        pRv_posts.setHasFixedSize(true);// 리사이클러뷰 기존성능 강화
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-//        pRv_posts.setLayoutManager(layoutManager);
+        rv_ranking.setHasFixedSize(true);// 리사이클러뷰 기존성능 강화
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rv_ranking.setLayoutManager(layoutManager);
+        rankinglist = new ArrayList<>();// ranking 객체 담을 리스트
+
+        //어댑터 연결
+        rAdapter = new RankingAdapter(rankinglist, getContext());
+        rv_ranking.setAdapter(rAdapter);
 
         rDatabase = FirebaseDatabase.getInstance();
         databaseReference = rDatabase.getReference("user-posts");//DB연결
+
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -111,12 +121,20 @@ public class FragmentRanking extends Fragment {
                     }
                 });
                 //
+                int cnt = 1;
                 for(Entry<String, Integer> entry : list_entries) {
+                    String userId = entry.getKey();
                     Log.e("정렬된 값: ",entry.getKey() + " : " + entry.getValue());
-                    //System.out.println(entry.getKey() + " : " + entry.getValue());
+                    RankingItems rankingItems = new RankingItems();
+                    rankingItems.setOrder(cnt);
+                    rankingItems.setUserName(userMap.get(userId).getAuthor());
+                    rankingItems.setUserProfile(userMap.get(userId).getProfileImg());
+                    rankinglist.add(rankingItems);
+                    cnt = cnt + 1;
                 }
                 Log.e("??: ",list_entries.toString());
                 //어댑터 연결,  HashMap<String, Post>() userMap , list_entries ArrayList<Entry<String, Integer>>
+                rAdapter.setItem(rankinglist);
 
             }
 
