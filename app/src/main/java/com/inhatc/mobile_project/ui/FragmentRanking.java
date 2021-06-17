@@ -15,20 +15,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.inhatc.mobile_project.R;
-import com.inhatc.mobile_project.RankingItems;
+import com.inhatc.mobile_project.db.RankingItems;
 import com.inhatc.mobile_project.adapter.RankingAdapter;
-import com.inhatc.mobile_project.db.MemberInfo;
 import com.inhatc.mobile_project.db.Post;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,7 +31,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 public class FragmentRanking extends Fragment {
@@ -132,7 +126,7 @@ public class FragmentRanking extends Fragment {
                     rankinglist.add(rankingItems);
                     cnt = cnt + 1;
                 }
-                Log.e("??: ",list_entries.toString());
+                //Log.e("??: ",list_entries.toString());
                 //어댑터 연결,  HashMap<String, Post>() userMap , list_entries ArrayList<Entry<String, Integer>>
                 rAdapter.setItem(rankinglist);
 

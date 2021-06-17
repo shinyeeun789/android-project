@@ -1,4 +1,4 @@
-package com.inhatc.mobile_project;
+package com.inhatc.mobile_project.db;
 
 public class RankingItems {
     private int order;

@@ -29,6 +29,24 @@
             android:gravity="center_vertical"
             android:text="이름이름"
             android:textSize="15dp" />
+
+        <Space
+        android:layout_width="80dp"
+        android:layout_height="33dp"
+        android:layout_weight="3" />
+
+        <ImageView
+            android:id="@+id/edtiBtn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="24dp"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/iconfinder_setting_3_6137415" />
+
+
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

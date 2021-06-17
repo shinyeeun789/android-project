@@ -28,7 +28,7 @@ public class Post {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Post(String postId, String uid, String author, double mLatitude, double mLongitude, String postcontent, String title, String downloadImgUri, String profileImg) {
+    public Post(String postId, String uid, String author, double mLatitude, double mLongitude, String postcontent, String downloadImgUri, String profileImg) {
         this.postId = postId;
         this.uid = uid;
         this.author = author;
@@ -36,7 +36,6 @@ public class Post {
         this.downloadImgUri = downloadImgUri;
         this.mLatitude = mLatitude;
         this.mLongitude = mLongitude;
-        this.title = title;
         this.profileImg = profileImg;
     }
 

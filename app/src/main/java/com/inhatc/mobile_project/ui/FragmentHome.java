@@ -139,13 +139,14 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
 
         if(isAllPost){
             databaseReference = pDatabase.getReference("posts"); // DB 테이블 연결
+//            pAdapter = new PostAdapter(postarray, pDatabase.getReference("user-posts").child(user.getUid()), getContext());
         }else{
             databaseReference = pDatabase.getReference("user-posts").child(user.getUid()); // DB 테이블 연결
         }
 
 
-
         pAdapter = new PostAdapter(postarray, getContext());
+
         pRv_posts.setAdapter(pAdapter); //리사이클 뷰에 어댑터 연결
 
         //데이터변경 있을때마다
