@@ -22,107 +22,90 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profileImgView"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:layout_marginStart="135dp"
-                android:layout_marginTop="36dp"
-                android:layout_marginEnd="136dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"/>
 
             <TextView
-                android:id="@+id/tv_userBirth"
+                android:id="@+id/tv_userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="161dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="162dp"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/barunhipi"
                 android:text=""
-                android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                android:textSize="30dp"
+                android:layout_gravity="center" />
+
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="168dp"
                 android:layout_marginTop="40dp"
-                android:layout_marginEnd="168dp"
                 android:fontFamily="@font/payboocotfextrabold"
                 android:text="전화번호"
                 android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_userName" />
+                android:layout_gravity="center" />
 
             <TextView
                 android:id="@+id/tv_userPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="149dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="148dp"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/barunhipi"
                 android:text=""
                 android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/payboocotfextrabold"
+                android:text="생년월일"
+                android:textSize="20dp"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/tv_userBirth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center"
+                android:fontFamily="@font/barunhipi"
+                android:text=""
+                android:textSize="20dp" />
 
             <Button
                 android:id="@+id/btnUpdateUser"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="105dp"
                 android:layout_marginTop="60dp"
-                android:layout_marginEnd="2dp"
                 android:fontFamily="@font/payboocotfextrabold"
                 android:text="회원 정보 수정"
                 android:textColor="#404040"
-                app:layout_constraintEnd_toStartOf="@+id/btn_log_out"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_userBirth" />
+                android:layout_gravity="center" />
 
             <Button
                 android:id="@+id/btn_log_out"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="60dp"
-                android:layout_marginEnd="99dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/payboocotfextrabold"
                 android:text="로그아웃"
                 android:textColor="#404040"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnUpdateUser"
-                app:layout_constraintTop_toBottomOf="@+id/tv_userBirth" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="168dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="168dp"
-                android:fontFamily="@font/payboocotfextrabold"
-                android:text="생년월일"
-                android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_userPhone" />
+                android:layout_gravity="center" />
 
             <View
                 android:layout_width="match_parent"
@@ -131,21 +114,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_userName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="205dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="206dp"
-                android:fontFamily="@font/barunhipi"
-                android:text=""
-                android:textSize="30dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profileImgView" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>

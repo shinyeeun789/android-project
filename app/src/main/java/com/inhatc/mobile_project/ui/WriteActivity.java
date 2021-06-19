@@ -177,7 +177,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                     replaceLatLng(address);
                 } else {
                     // addressList 사용해서 위도, 경도 파이어베이스에 저장
-                    btnPlaceDialog.setText(addressList.get(0).getAdminArea()+"에!");
+                    btnPlaceDialog.setText(addressList.get(0).getCountryName()+"에!");
                     placeDialog.dismiss();
                 }
                 break;
