@@ -1,4 +1,4 @@
-package com.inhatc.mobile_project.ui;
+package com.inhatc.mobile_project.activity;
 
 import android.content.Intent;
 import android.os.Bundle;

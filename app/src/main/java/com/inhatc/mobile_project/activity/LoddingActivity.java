@@ -1,4 +1,4 @@
-package com.inhatc.mobile_project;
+package com.inhatc.mobile_project.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,10 +14,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
 
 import org.parceler.Parcels;
 
+/*사용자 정보를 받아오기 위한 lodingactivity*/
 public class LoddingActivity extends AppCompatActivity {
     final String TAG = "LoddingActivity";
 
@@ -31,7 +33,7 @@ public class LoddingActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        //사용자 정보를 받아오기 위해 DocumentReference 객체 생성ㄹ
+        //사용자 정보를 받아오기 위해 DocumentReference 객체 생성
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef =  db.collection("users").document(user.getUid());

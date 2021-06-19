@@ -1,8 +1,7 @@
-package com.inhatc.mobile_project.ui;
+package com.inhatc.mobile_project.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
+import com.inhatc.mobile_project.activity.MainActivity;
+import com.inhatc.mobile_project.activity.ProfileUpdateActivity;
 
 import org.parceler.Parcels;
 

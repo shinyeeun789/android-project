@@ -1,4 +1,4 @@
-package com.inhatc.mobile_project.ui;
+package com.inhatc.mobile_project.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,4 +1,4 @@
-package com.inhatc.mobile_project.ui;
+package com.inhatc.mobile_project.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -28,6 +28,7 @@ import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.adapter.PostAdapter;
 import com.inhatc.mobile_project.db.MemberInfo;
 import com.inhatc.mobile_project.db.Post;
+import com.inhatc.mobile_project.activity.WriteActivity;
 
 import org.parceler.Parcels;
 

@@ -1,4 +1,4 @@
-package com.inhatc.mobile_project.ui;
+package com.inhatc.mobile_project.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,32 +9,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.inhatc.mobile_project.LoddingActivity;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
-import com.inhatc.mobile_project.db.Post;
-
-import org.parceler.Parcels;
-
-import java.io.Serializable;
-import java.lang.reflect.Member;
+import com.inhatc.mobile_project.fragment.FragmentHome;
+import com.inhatc.mobile_project.fragment.FragmentRanking;
+import com.inhatc.mobile_project.fragment.FragmentUser;
 
 import static java.lang.Thread.sleep;
 

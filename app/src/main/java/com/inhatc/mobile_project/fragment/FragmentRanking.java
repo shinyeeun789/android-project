@@ -1,4 +1,4 @@
-package com.inhatc.mobile_project.ui;
+package com.inhatc.mobile_project.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -54,11 +54,10 @@ public class FragmentRanking extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ranking, container, false);
 
-
         rv_ranking = (RecyclerView) view.findViewById(R.id.rankingRecyclerView);
 
-        // 좋아요 수 계산
 
+        // 좋아요 수 계산
         rv_ranking.setHasFixedSize(true);// 리사이클러뷰 기존성능 강화
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rv_ranking.setLayoutManager(layoutManager);
@@ -74,15 +73,15 @@ public class FragmentRanking extends Fragment {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
+                // post 객체에 업데이트가 있을 때마다 UI를 업데이트
 
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){// 반복문으로 데이터 List를 추출해냄
-                    String userID = snapshot.getKey();
-                    starCntMap.put(userID, 0);
+                    String userID = snapshot.getKey(); // UID 값을 얻어서
+                    starCntMap.put(userID, 0); // satrCnt를 세는 Map에 UID를 key값으로 정해서 넣음
                     for(DataSnapshot sn : snapshot.getChildren()){
-                        Post post = sn.getValue(Post.class);
+                        Post post = sn.getValue(Post.class); // 해당 포스트 객체를 받아와서
                         starCntMap.put(userID, starCntMap.get(userID) + post.getStarCount());//사용자, 포스트 좋아요 갯수 더하기
-                        userMap.put(userID, post);
+                        userMap.put(userID, post); // 상용자 이름과 프로필 사진을 가져오기 위해 uid와 해당 post 정보를 받음
                     }
                 }
                 list_entries =new ArrayList<Entry<String, Integer>>(starCntMap.entrySet());
@@ -96,9 +95,9 @@ public class FragmentRanking extends Fragment {
                 });
                 //
                 int cnt = 1;
+                //랭킹객체에 순위, 사용자 이름, 사용자 프로파일 이미지 url 값을 setting
                 for(Entry<String, Integer> entry : list_entries) {
                     String userId = entry.getKey();
-                    Log.e("정렬된 값: ",entry.getKey() + " : " + entry.getValue());
                     RankingItems rankingItems = new RankingItems();
                     rankingItems.setOrder(cnt);
                     rankingItems.setUserName(userMap.get(userId).getAuthor());
@@ -106,15 +105,13 @@ public class FragmentRanking extends Fragment {
                     rankinglist.add(rankingItems);
                     cnt = cnt + 1;
                 }
-                //Log.e("??: ",list_entries.toString());
-                //어댑터 연결,  HashMap<String, Post>() userMap , list_entries ArrayList<Entry<String, Integer>>
-                rAdapter.setItem(rankinglist);
+                rAdapter.setItem(rankinglist);//ranking 어댑터 set으로 ui 업데이트
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
+                // 실패시 메시지 츌력
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
             }
         };

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,8 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.Post;
-import com.inhatc.mobile_project.ui.MapActivity;
-import com.inhatc.mobile_project.ui.WriteActivity;
+import com.inhatc.mobile_project.activity.MapActivity;
+import com.inhatc.mobile_project.activity.WriteActivity;
 
 import org.parceler.Parcels;
 
