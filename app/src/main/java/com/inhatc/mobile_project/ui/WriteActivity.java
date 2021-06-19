@@ -149,6 +149,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    // 수정시 view 셋팅
     private void initView() {
         txtcontent.setText(postItems.getPostcontent());
         Glide.with(this)
@@ -250,7 +251,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    //사진 Url로
+    //사진 저장및 사진 URL값 받기
     private void pthotURL(String uId, String name, String content, Uri filePath) {
 
         //포스트 키값 가져오기
@@ -339,8 +340,6 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
         try {
             addressList = geocoder.getFromLocationName(address, 10);
-//            postItems.setmLatitude(addressList.get(0).getLatitude());
-//            postItems.setmLongitude(addressList.get(0).getLongitude(), addressList.get(0).getLatitude());
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("test", "입출력 오류 - 서버에서 주소변환시 에러 발생");

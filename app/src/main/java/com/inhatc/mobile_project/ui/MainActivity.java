@@ -47,23 +47,13 @@ public class MainActivity extends AppCompatActivity {
     private FragmentUser fragmentUser = new FragmentUser();
     private MemberInfo userInfo = new MemberInfo();
     private Bundle bundle = new Bundle();
-
-    Handler handler = new Handler();
-    class handler extends Handler{
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            Log.e("handle", "handle");
-            initView();
-        }
-    }
+    
 
 
     @Override
     public void onBackPressed() {
         //메인 화면에서 뒤로가기 버튼 클릭 시 바로 종료
         super.onBackPressed();
-        //finish();
     }
 
 
@@ -77,62 +67,17 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user == null){
             //로그인이 안되있으면 로그인 화면으로
-            goTomyActivity(LoginActivity.class, true);
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            // 뒤로가기 버튼 누르면 로그인 화면이나 회원가입 화면으로 이동
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(loginIntent);
 
         }else {
+            //로그인이 되어있으면 loddingActivity로 이동하여 사용자 정보 받아옴
             Intent intent = new Intent(this, LoddingActivity.class);
             startActivityForResult(intent, 1);
         }
-
-//
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        DocumentReference docRef =  db.collection("users").document(user.getUid());
-
-//        Task<DocumentSnapshot> task = docRef.get();
-//        if(task.isSuccessful()){
-//            DocumentSnapshot doc = task.getResult();
-//            userInfo = doc.toObject(MemberInfo.class);
-//        }
-//
-//        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                DocumentSnapshot doc = task.getResult();
-//                if(doc.exists()){
-//                    userInfo = doc.toObject(MemberInfo.class);
-//                }
-//            }
-//        });
-
-
-//        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException error) {
-//                if(error != null){
-//                    Log.w(TAG, "Listen failed.", error);
-//                    return;
-//                }
-//
-//                String source = snapshot != null && snapshot.getMetadata().hasPendingWrites() ? "Local" : "Server";
-//                if(snapshot != null && snapshot.exists()){
-//                    Log.d(TAG, source + "data: " +snapshot.getData());
-//                    userInfo = snapshot.toObject(MemberInfo.class);
-////                    Message msg = handler.obtainMessage();
-////                    handler.sendMessage(msg);
-//
-//                }else {
-//                    Log.d(TAG, source + " data: null");
-//                }
-//            }
-//        });
-//        try
-//        {
-//            sleep(1500);
-//        } catch (InterruptedException e)
-//        {
-//            e.printStackTrace();
-//        }
-
 
 
     }
@@ -141,14 +86,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1){
+            //사용자 정보를 받아옴
             bundle = data.getBundleExtra("userInfoData");
-            if(bundle != null){
-                Object value = Parcels.unwrap(bundle.getParcelable("userInfoData"));
-                userInfo = (MemberInfo) value;
-            }
             initView();
-//            Bundle bundle = new Bundle();
-//            bundle.putParcelable("userInfoData", Parcels.wrap(userInfo));
         }
     }
 
@@ -183,21 +123,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void replaceFragment(Fragment fragment) {
+        //사용자 정보가 들어있는 번들을 fragment에 같이 보냄
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment).commitAllowingStateLoss();
     }
 
-    private void goTomyActivity(Class ac, boolean isbacktohome){
-        Intent intent = new Intent(MainActivity.this, ac);
-        // 뒤로가기 버튼 누르면 로그인 화면이나 회원가입 화면으로 이동
-        //--> activity 기록 지워주어야 함--> flag 사용??
-        if(isbacktohome){
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-
-        startActivity(intent);
-    }
 }

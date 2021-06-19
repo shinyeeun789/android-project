@@ -31,6 +31,7 @@ public class LoddingActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        //사용자 정보를 받아오기 위해 DocumentReference 객체 생성ㄹ
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef =  db.collection("users").document(user.getUid());
@@ -44,12 +45,13 @@ public class LoddingActivity extends AppCompatActivity {
                     return;
                 }
 
+                //사용자 정보를 잘 받아오면
                 String source = snapshot != null && snapshot.getMetadata().hasPendingWrites() ? "Local" : "Server";
                 if(snapshot != null && snapshot.exists()){
                     Log.d(TAG, source + "data: " +snapshot.getData());
-                    userInfo = snapshot.toObject(MemberInfo.class);
-                    bundle.putParcelable("userInfoData", Parcels.wrap(userInfo));
-                    intent.putExtra("userInfoData", bundle);
+                    userInfo = snapshot.toObject(MemberInfo.class); //받아오는 값을 userInfo 객체에 넣고
+                    bundle.putParcelable("userInfoData", Parcels.wrap(userInfo)); //userInfo를 번들로 묶고
+                    intent.putExtra("userInfoData", bundle); // 번들을 intent에 put함
                     setResult(RESULT_OK, intent);
                     finish();
 

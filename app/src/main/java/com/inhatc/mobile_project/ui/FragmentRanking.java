@@ -38,6 +38,7 @@ public class FragmentRanking extends Fragment {
     final String TAG = "FragmentRankin";
 
     private Calendar cToday = Calendar.getInstance(), startDay = Calendar.getInstance(), endDay = Calendar.getInstance();
+    private TextView rankingWeek;
 
     private RankingAdapter rAdapter;
     private RecyclerView rv_ranking;
@@ -54,9 +55,19 @@ public class FragmentRanking extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ranking, container, false);
 
+
+        rankingWeek = (TextView) view.findViewById(R.id.tv_rankingWeek);
+
         rv_ranking = (RecyclerView) view.findViewById(R.id.rankingRecyclerView);
 
+        startDay.set(cToday.getTime().getYear(), cToday.getTime().getMonth(), cToday.getTime().getDate());      startDay.getTime();
+        endDay.set(cToday.getTime().getYear(), cToday.getTime().getMonth(), cToday.getTime().getDate());      endDay.getTime();
+        startDay.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        endDay.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+        rankingWeek.setText(String.format("%02d월 %02d일 ~ %02d월 %02d일", startDay.getTime().getMonth()+1, startDay.getTime().getDate(), endDay.getTime().getMonth()+1, endDay.getTime().getDate()));
+
         // 좋아요 수 계산
+
         rv_ranking.setHasFixedSize(true);// 리사이클러뷰 기존성능 강화
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rv_ranking.setLayoutManager(layoutManager);
