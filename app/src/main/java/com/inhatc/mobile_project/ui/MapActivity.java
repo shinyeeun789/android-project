@@ -46,8 +46,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
-        //LatLng SEOUL = new LatLng(37.56, 126.97);
-
         LatLng place = new LatLng(latitude, longitude);
 
         try {
@@ -57,16 +55,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
 
+        // 해당 포스트의 위도, 경도를 얻어 구글맵에 마커로 표시하기
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(place);
         markerOptions.title(address.get(0).getCountryName());
         markerOptions.snippet(address.get(0).getAddressLine(0));
 
+        // 마커 이미지 변경
         BitmapDrawable bitmapDraw = (BitmapDrawable) getResources().getDrawable(R.drawable.icon_marker);
         Bitmap bitmap = bitmapDraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(bitmap, 100, 100, false);
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-        mMap.addMarker(markerOptions);
+        mMap.addMarker(markerOptions);          // 마커 추가
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place, 16));
     }
