@@ -3,8 +3,6 @@ package com.inhatc.mobile_project.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,12 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.inhatc.mobile_project.DownloadFilesTask;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.adapter.PostAdapter;
 import com.inhatc.mobile_project.db.MemberInfo;
@@ -43,10 +32,8 @@ import com.inhatc.mobile_project.db.Post;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
-import static com.inhatc.mobile_project.R.drawable.material_cursor_drawable;
 import static com.inhatc.mobile_project.R.drawable.select_background;
 import static com.inhatc.mobile_project.R.drawable.unselect_background;
 
@@ -69,17 +56,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
     private TextView btn_allpost, btn_mypot;
 
     private boolean isAllPost = true;
-
-    Handler handler = new Handler();
-    class handler extends Handler{
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            Log.e("handle", "handle");
-            showUI();
-
-        }
-    }
+    
 
 
     @Nullable
@@ -105,6 +82,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         btn_mypot.setOnClickListener(this);
 
         pRv_posts = (RecyclerView) view.findViewById(R.id.homeRecyclerView);
+        //post내용들 보여줌
         showUI();
 
 
@@ -115,22 +93,27 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btnGoWrite:
+                //post추가 시 writeActivity로 이동
                 Intent intentWrite = new Intent(getActivity(), WriteActivity.class);;
                 intentWrite.putExtra("userInfoData",bundle);
                 startActivity(intentWrite);
                 isAllPost = true;
+                custeomBtn();
                 break;
             case R.id.btn_allpost:
+                //모든 포스트 보기 클릭 시
                 isAllPost = true;
                 custeomBtn();
                 break;
             case R.id.btn_mypot:
+                //내 포스트 보기 클릭 시
                 isAllPost = false;
                 custeomBtn();
                 break;
         }
     }
 
+    //post내용을 어댑터와 리사이클러뷰를 이용하여 보여줌
     private void showUI() {
         pRv_posts.setHasFixedSize(true);// 리사이클러뷰 기존성능 강화
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -141,7 +124,6 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
 
         if(isAllPost){
             databaseReference = pDatabase.getReference("posts"); // DB 테이블 연결
-//            pAdapter = new PostAdapter(postarray, pDatabase.getReference("user-posts").child(user.getUid()), getContext());
         }else{
             databaseReference = pDatabase.getReference("user-posts").child(user.getUid()); // DB 테이블 연결
         }
@@ -155,7 +137,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
+                // 포스트 객체를 얻고 값이 수정 되었을때 UI를 업데이트 실켜줌
                 isAllPost = true;
                 postarray.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){// 반복문으로 데이터 List를 추출해냄
@@ -169,7 +151,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
+                // 포스트가 실패하면 log 찍음
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
             }
         };
@@ -177,6 +159,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
 
     }
 
+    // 전체 포스트 보기, 내포스트만 보기 할때 버튼의 ui변경 메서드
     private void custeomBtn() {
         if(isAllPost){
             btn_allpost.setBackground(ContextCompat.getDrawable(getContext(), select_background));

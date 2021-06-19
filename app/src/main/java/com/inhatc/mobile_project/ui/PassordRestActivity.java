@@ -25,7 +25,6 @@ public class PassordRestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_passwad_rest);
 
-        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();//onCreate() 메서드에서 FirebaseAuth 인스턴스 초기화
 
         findViewById(R.id.sendBtn).setOnClickListener(onClickListener);
@@ -54,9 +53,13 @@ public class PassordRestActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+                                //성공시 main 로그인 액티비티로 이동
                                 Toast.makeText(PassordRestActivity.this, "이메일을 보냈습니다.", Toast.LENGTH_SHORT).show();
                                 Log.d(TAG, "Email sent.");
-                                goTomyActivity(LoginActivity.class, true);
+                                Intent intent = new Intent(PassordRestActivity.this, LoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
                             }
                         }
                     });
@@ -65,16 +68,5 @@ public class PassordRestActivity extends AppCompatActivity {
         }
     }
 
-    private void goTomyActivity(Class ac, boolean isbacktohome){
-        Intent intent = new Intent(PassordRestActivity.this, ac);
-        // 뒤로가기 버튼 누르면 로그인 화면이나 회원가입 화면으로 이동
-        //--> activity 기록 지워주어야 함--> flag 사용??
-        if(isbacktohome){
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-
-        startActivity(intent);
-    }
 
 }

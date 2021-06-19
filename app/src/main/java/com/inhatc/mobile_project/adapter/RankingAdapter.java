@@ -16,11 +16,12 @@ import com.inhatc.mobile_project.db.RankingItems;
 
 import java.util.ArrayList;
 
+/*
+* 좋아요 수가 많은 랭킹을 보여주는 어댑터 */
 public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder> {
 
     private Context mContext;
     private int index;
-
     private ArrayList<RankingItems> rankingItems;
 
 
@@ -59,7 +60,6 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHold
     //뷰내용 설정
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tv_ranking, tv_user;
-        //private int index;
         private ImageView userProfile;
 
         public ViewHolder(@NonNull View view) {
@@ -71,6 +71,7 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHold
 
 
         public void onBind(@NonNull ViewHolder holder, RankingItems data, int position) {
+            //뷰 내용 셋팅
             index = position;
             tv_ranking.setText(String.valueOf(data.getOrder()));
             tv_user.setText(data.getUserName());

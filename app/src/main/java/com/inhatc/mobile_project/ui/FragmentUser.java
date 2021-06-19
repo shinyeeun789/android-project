@@ -14,18 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.inhatc.mobile_project.DownloadFilesTask;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
 
@@ -54,6 +44,7 @@ public class FragmentUser extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user, container, false);
 
+        //해당 사용장 정보를 bundle로 가져옴
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null){
             Bundle bundle = getArguments();
@@ -64,20 +55,7 @@ public class FragmentUser extends Fragment {
 
             }
         }
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        DocumentReference docRef =  db.collection("users").document(user.getUid());
-//        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                userInfo = documentSnapshot.toObject(MemberInfo.class);
-//                userName.setText(userInfo.getName());
-//                phoneNum.setText(userInfo.getPhonNum());
-//                birth.setText(userInfo.getBirthDay());
-//                if(userInfo.getProfimageURL() != null){
-//                    new DownloadFilesTask(imgView).execute(userInfo.getProfimageURL());
-//                }
-//            }
-//        });
+
 
 
 
@@ -98,10 +76,6 @@ public class FragmentUser extends Fragment {
                     .load(userInfo.getProfimageURL())
                     .into(imgView);
         }
-
-//        if(userInfo.getProfimageURL() != null){
-//            new DownloadFilesTask(imgView).execute(userInfo.getProfimageURL());
-//        }
 
         btnUpdate.setOnClickListener(onClickListener);
         btnLogout.setOnClickListener(onClickListener);
@@ -125,12 +99,12 @@ public class FragmentUser extends Fragment {
                     startActivity(logoutintent);
                     break;
                 case R.id.btnUpdateUser:
+                    //사용자 프로필 수정
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("userInfoData", Parcels.wrap(userInfo));
                     Intent intent = new Intent(getActivity(), ProfileUpdateActivity.class);
                     intent.putExtra("userInfo", bundle);
                     startActivity(intent);
-//                    goTomyActivity(ProfileUpdateActivity.class, true);
                     break;
             }
         }

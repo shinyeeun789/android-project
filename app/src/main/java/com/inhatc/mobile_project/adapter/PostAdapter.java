@@ -19,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,8 +26,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.inhatc.mobile_project.DownloadFilesTask;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.Post;
 import com.inhatc.mobile_project.ui.MapActivity;
@@ -49,9 +46,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     private Context mContext;
     private DatabaseReference pDatabase;
 
-    // 현재 보여지고 있는 리스트의 데이터 편집 말고
-    // 예를 들면 post가 보여지고 이를 편집, 삭제 시 user-post도 같이 편집 삭제 가능하게
-    // private DatabaseReference subDatabaseRef;
 
     private int index;
     private FirebaseUser user;
@@ -98,8 +92,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
                 Intent i = new Intent(mContext, MapActivity.class);
                 // 위도 경도 값 구하는거
-                //postItems.get(position).getmLatitude()
-                //postItems.get(position).getmLongitude()
                 i.putExtra("latitude", postItems.get(position).getmLatitude());
                 i.putExtra("longitude", postItems.get(position).getmLongitude());
                 mContext.startActivity(i);
@@ -132,6 +124,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         public void onBind(@NonNull ViewHolder holder, Post post, int position) {
             index = position;
 
+            //이미지, 포스트 내용, 사용자 정보, 위치 정보 setting
             Glide.with(holder.itemView)
                     .load(post.getDownloadImgUri())
                     .into(postImage);
@@ -162,6 +155,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 likeImg.setImageResource(R.drawable.icon_empty_good);
             }
 
+            //현재 사용자와 포스트를 쓴 사용자와 다를 시
+            //좋아요 가능
             if(!(post.getUid().equals(user.getUid()))){
 
                 //좋아요 클릭시
@@ -177,7 +172,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
                         //좋아요 처리...
                         //좋아요 된 상태에서 클릭하면 좋아요 취소
+                        //좋아요리스트에 uid로 true flase 값 저장, 좋아요 카운트 값 변경
                         if(isLikePost){
+                            //좋아요 취소
                             isLikePost = false;
                             likeImg.setImageResource(R.drawable.icon_empty_good);
                             stars.put(user.getUid(), isLikePost);
@@ -236,6 +233,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                                         onDeleteContent(position);
                                         break;
                                     case R.id.action_modify:
+                                        //수정할 수 있게 현재 position의 post값을 bundle로 넣어 
+                                        // WriteActivity로 액티비티 이동
                                         Bundle bundle = new Bundle();
                                         bundle.putParcelable("UpdatePostData", Parcels.wrap(post));
 
@@ -263,7 +262,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
     }
 
-    //삭제
+    //삭제 메소드
     private void onDeleteContent(int position)
     {
 

@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,16 +25,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.inhatc.mobile_project.DownloadFilesTask;
 import com.inhatc.mobile_project.R;
 import com.inhatc.mobile_project.db.MemberInfo;
-import com.inhatc.mobile_project.db.Post;
 
 
 import org.parceler.Parcels;
@@ -41,10 +38,6 @@ import org.parceler.Parcels;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -74,6 +67,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();//현재 user값 받아서
         Intent intent = getIntent();
+        //사용자 정보있는 번들 받기
         Bundle bundle = intent.getBundleExtra("userInfo");
         if(bundle != null){
             Object value = Parcels.unwrap(bundle.getParcelable("userInfoData"));
@@ -93,11 +87,12 @@ public class ProfileUpdateActivity extends AppCompatActivity {
         birth.setText(userInfo.getBirthDay());
 
         if(userInfo.getProfimageURL() != null){
-            new DownloadFilesTask(profileImageVIew).execute(userInfo.getProfimageURL());
+            Glide.with(this)
+                    .load(userInfo.getProfimageURL())
+                    .into(profileImageVIew);
         }
 
-
-
+        
         findViewById(R.id.complteBtn2).setOnClickListener(onClickListener);
         findViewById(R.id.profileImgView).setOnClickListener(onClickListener);
     }
@@ -109,7 +104,9 @@ public class ProfileUpdateActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.complteBtn2:
+                    //저장
                     pthotURL();
+                    profileUpdate();
                     break;
                 case R.id.profileImgView:
                     //로컬 사진첩으로 넘김
@@ -119,13 +116,14 @@ public class ProfileUpdateActivity extends AppCompatActivity {
         }
     };
 
+    //사진첩으로 액티비티 이동
     private void lodadAlbum() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, GALLEY_CODE);
     }
 
-    //갤러리로 이동
+    //갤러리로 이동 후 파일 경로 받아오기
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -151,6 +149,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
         }
     }
 
+    //사진 업로드와 업로드한 사진 url 값 받기
     private void pthotURL(){
 
         FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스 만들고
@@ -179,7 +178,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                             @SuppressWarnings("VisibleForTests")
                             Uri downloadUrl = task.getResult();                                     //업로드한 사진 다운로드 url
                             strUrl = downloadUrl.toString();
-                            profileUpdate();
+//                            profileUpdate();
 
                         }else{
                             Toast.makeText(ProfileUpdateActivity.this, "업로드 실패", Toast.LENGTH_SHORT).show();
@@ -199,14 +198,13 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                 strUrl = "https://firebasestorage.googleapis.com/v0/b/mobile-project-31597.appspot.com/o/profile%2Ficon_user.png?alt=media&token=1f46c19a-0173-4e29-ae8c-a05d2d84769c";
             }
 
-            profileUpdate();
+//            profileUpdate();
 
         }
     }
 
     /*회원정보 업로드*/
     private void profileUpdate(){
-
 
         FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스 만들고
         StorageReference storageRef = storage.getReference();
