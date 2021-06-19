@@ -178,7 +178,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                     replaceLatLng(address);
                 } else {
                     // addressList 사용해서 위도, 경도 파이어베이스에 저장
-                    btnPlaceDialog.setText(addressList.get(0).getCountryName()+"에!");
+                    btnPlaceDialog.setText(addressList.get(0).getAdminArea()+"에!");
                     placeDialog.dismiss();
                 }
                 break;
@@ -307,7 +307,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    // 장소 선택 다이얼로그 보여주기
+    // 다이얼로그 보여주기
     public void showPlaceDialog() {
         placeDialog = new Dialog(this);
         placeDialog.setContentView(R.layout.dialog_place);
@@ -342,7 +342,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
             addressList = geocoder.getFromLocationName(address, 10);
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e("test", "입출력 오류 - 서버에서 주소 변환시 에러 발생");
+            Log.e("test", "입출력 오류 - 서버에서 주소변환시 에러 발생");
         }
 
         if (addressList != null) {

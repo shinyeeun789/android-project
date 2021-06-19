@@ -1,12 +1,11 @@
 package com.inhatc.mobile_project.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,6 +37,7 @@ public class FragmentRanking extends Fragment {
     final String TAG = "FragmentRankin";
 
     private Calendar cToday = Calendar.getInstance(), startDay = Calendar.getInstance(), endDay = Calendar.getInstance();
+    private TextView rankingWeek;
 
     private RankingAdapter rAdapter;
     private RecyclerView rv_ranking;
@@ -53,6 +53,7 @@ public class FragmentRanking extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ranking, container, false);
+
 
         rv_ranking = (RecyclerView) view.findViewById(R.id.rankingRecyclerView);
 
