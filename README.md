@@ -1,3 +1,6 @@
+![024_4 (19)](https://github.com/hee9841/mobile_project/assets/70899677/631cc7aa-5f3b-43c3-b5dc-f5f9ab2528a4)
+![024_4 (20)](https://github.com/hee9841/mobile_project/assets/70899677/b17c9c28-f203-4a5a-a467-4ae1df54f7ea)
+![024_4 (21)](https://github.com/hee9841/mobile_project/assets/70899677/21a77c55-b80c-4240-95f4-0e42d21d4a5d)
 ![024_4 (1)](https://github.com/hee9841/mobile_project/assets/70899677/3e7a43d1-be99-4235-9925-3c3859646606)
 ![024_4 (2)](https://github.com/hee9841/mobile_project/assets/70899677/3f4514d6-552a-4ca2-9e1c-041245ef475b)
 ![024_4 (3)](https://github.com/hee9841/mobile_project/assets/70899677/6f6d9a9a-6f9e-4028-8bda-92f86d6088df)
@@ -16,6 +19,3 @@
 ![024_4 (16)](https://github.com/hee9841/mobile_project/assets/70899677/cc9c0abb-d324-4e8b-b2a0-1df4b9038a5b)
 ![024_4 (17)](https://github.com/hee9841/mobile_project/assets/70899677/b1bae8ea-cc33-459d-9689-de2c07a147da)
 ![024_4 (18)](https://github.com/hee9841/mobile_project/assets/70899677/e015003b-5ab9-4e37-a696-b3fb80d140a1)
-![024_4 (19)](https://github.com/hee9841/mobile_project/assets/70899677/631cc7aa-5f3b-43c3-b5dc-f5f9ab2528a4)
-![024_4 (20)](https://github.com/hee9841/mobile_project/assets/70899677/b17c9c28-f203-4a5a-a467-4ae1df54f7ea)
-![024_4 (21)](https://github.com/hee9841/mobile_project/assets/70899677/21a77c55-b80c-4240-95f4-0e42d21d4a5d)
